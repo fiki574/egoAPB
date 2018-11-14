@@ -29,7 +29,7 @@ namespace APBClient.Lobby
                     {
                         Uid = reader.ReadInt32(),
                         Name = reader.ReadUnicodeString(34),
-                        Status = (WorldInfo.StatusType)reader.ReadByte(),
+                        Status = (StatusType)reader.ReadByte(),
                         Population = reader.ReadByte(),
                         EnfFaction = reader.ReadByte(),
                         CrimFaction = reader.ReadByte(),

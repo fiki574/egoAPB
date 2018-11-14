@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APBClient.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="IO\APBBinaryReader.cs" />
     <Compile Include="IO\APBBinaryWriter.cs" />
     <Compile Include="Lobby\ClientPackets\GC2LS_ASK_CHARACTER_INFO.cs" />
@@ -84,12 +85,10 @@
     <Compile Include="Lobby\ClientPackets\GC2LS_HARDWARE_INFO.cs" />
     <Compile Include="Lobby\Structures\LoginFailedData.cs" />
     <Compile Include="Lobby\Structures\WorldInfo.cs" />
-    <Compile Include="LoginStatuses.cs" />
     <Compile Include="Networking\ErrorData.cs" />
     <Compile Include="Networking\IPacketHandler.cs" />
     <Compile Include="Networking\APBOpCode.cs" />
     <Compile Include="Networking\PacketHandlerAttribute.cs" />
-    <Compile Include="ResponseCodes.cs" />
     <Compile Include="World\ServerPackets\WS2GC_CLAN_INFO.cs" />
     <Compile Include="World\ServerPackets\WS2GC_CLAN_MOTD.cs" />
     <Compile Include="World\ServerPackets\WS2GC_CLAN_RANK_INFO.cs" />

@@ -23,14 +23,14 @@ namespace APBClient.Lobby
                     var info = new CharacterInfo
                     {
                         SlotNumber = reader.ReadByte(),
-                        Faction = (CharacterInfo.FactionType)reader.ReadByte(),
+                        Faction = (FactionType)reader.ReadByte(),
                         WorldStatus = reader.ReadByte(),
                         WorldUID = reader.ReadInt32(),
                         WorldName = reader.ReadUnicodeString(34),
                         CharacterName = reader.ReadUnicodeString(34),
                         Rating = reader.ReadInt32(),
                         LastLogin = new DateTime(reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16()),
-                        Threat = (CharacterInfo.ThreatType)accountThreat
+                        Threat = (ThreatType)accountThreat
                     };
                     reader.ReadInt32();
                     characters.Add(info);

@@ -1,6 +1,54 @@
 ﻿namespace APBClient
 {
-    public enum ResponseCodes : int
+    public enum ClientState
+    {
+        Disconnected,
+        LobbyServerConnectInProgress,
+        LobbyServerConnectComplete,
+        LobbyServerLoginInProgress,
+        LobbyServerLoginComplete,
+        LobbyServerCharacterListReceived,
+        LobbyServerWorldListInProgress,
+        LobbyServerWorldEnterInProgress,
+        LobbyServerWorldEnterComplete,
+        WorldServerConnectInProgress,
+        WorldServerConnectComplete,
+        WorldServerWorldEnterInProgress,
+        WorldServerWorldEnterComplete,
+        WorldServerInstanceListInProgress,
+        WorldServerDistrictReserveInProgress,
+        WorldServerDistrictEnterInProgress,
+        WorldServerDistrictEnterComplete
+    }
+
+    public enum FactionType : byte
+    {
+        Enforcer = 1,
+        Criminal = 2
+    }
+
+    public enum ThreatType : byte
+    {
+        None = 0,
+        Green = 1,
+        Bronze = 2,
+        Silver = 3,
+        Gold = 4
+    }
+
+    public enum GenderType : byte
+    {
+        Male = 1,
+        Female = 2
+    }
+
+    public enum StatusType : byte
+    {
+        Offline = 0,
+        Online = 1
+    }
+
+    public enum OldResponseCodes : int
     {
         RC_SUCCESS = 0,
         RC_FAILED = 1,

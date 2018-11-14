@@ -4,12 +4,6 @@ namespace APBClient.Lobby
 {
     public class WorldInfo
     {
-        public enum StatusType
-        {
-            Offline = 0,
-            Online = 1
-        }
-
         public int Uid;
         public string Name;
         public StatusType Status;

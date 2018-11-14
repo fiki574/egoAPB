@@ -16,7 +16,7 @@ namespace APBClient.Lobby
                 var data = new CharacterInfo.Detailed
                 {
                     Slot = reader.ReadByte(),
-                    Gender = (CharacterInfo.GenderType)reader.ReadByte(),
+                    Gender = (GenderType)reader.ReadByte(),
                     Playtime = reader.ReadUInt32(),
                     Rank = reader.ReadUInt32(),
                     Money = reader.ReadUInt32(),

@@ -53,27 +53,6 @@ namespace APBClient
             }
         }
 
-        public enum ClientState
-        {
-            Disconnected,
-            LobbyServerConnectInProgress,
-            LobbyServerConnectComplete,
-            LobbyServerLoginInProgress, 
-            LobbyServerLoginComplete,
-            LobbyServerCharacterListReceived,
-            LobbyServerWorldListInProgress,
-            LobbyServerWorldEnterInProgress,
-            LobbyServerWorldEnterComplete,
-            WorldServerConnectInProgress,
-            WorldServerConnectComplete,
-            WorldServerWorldEnterInProgress,
-            WorldServerWorldEnterComplete,
-            WorldServerInstanceListInProgress,
-            WorldServerDistrictReserveInProgress,
-            WorldServerDistrictEnterInProgress,
-            WorldServerDistrictEnterComplete
-        }
-
         private const string LobbyHost = "apb.login.gamersfirst.com";
         private const int LobbyPort = 1001;
 
