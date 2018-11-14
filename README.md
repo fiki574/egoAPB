@@ -1,11 +1,11 @@
-## APBWatcher
-- Original project at https://github.com/McSimp/APBWatcher
+## APBClient
+- Original project/library at https://github.com/McSimp/APBWatcher
 - This is continuation of the mentioned project
 
 ## Credits
 - McSimp - original creator
-- fiki574 - continued
+- 0x46696B69 - continued
 
 
 ## Features
-- TODO: list all
+- List all

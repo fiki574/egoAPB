@@ -14,7 +14,6 @@ namespace APBClient.World
             { 0x413D5EB0, "Fight Club-Baylan Shipping Storage-EN" },
             { 0xDC402E08, "Open Conflict-Waterfront-EN" },
             { 0xDB1AF08B, "Open Conflict-Financial-EN" },
-            { 0x00000000, "Unknown-District-EN-0" }
         };
         
         public int DistrictUid;
