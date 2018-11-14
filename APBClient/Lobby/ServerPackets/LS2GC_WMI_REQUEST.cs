@@ -20,7 +20,7 @@ namespace APBClient.Lobby
                 uint hwVValue = reader.ReadUInt32();
                 int encryptedDataSize = reader.ReadInt32();
                 byte[] encryptedData = reader.ReadBytes(encryptedDataSize);
-                byte[] decryptedData = WindowsRSA.DecryptData(client._clientDecryptEngine, encryptedData);
+                byte[] decryptedData = WindowsRSA.DecryptData(client.ClientDecryptEngine, encryptedData);
                 var dataReader = new APBBinaryReader(new MemoryStream(decryptedData));
 
                 string queryLanguage = dataReader.ReadASCIIString(4);
@@ -54,7 +54,7 @@ namespace APBClient.Lobby
                     string selectClause = dataReader.ReadASCIIString(selectLength + 1);
                     byte fromLength = dataReader.ReadByte();
                     string fromClause = dataReader.ReadASCIIString(fromLength + 1);
-                    byte[] hash = client._hardwareStore.BuildWmiSectionAndHash(hwWriter, sectionName, selectClause, fromClause, (skipHash == 1));
+                    byte[] hash = client.HardwareStore.BuildWmiSectionAndHash(hwWriter, sectionName, selectClause, fromClause, (skipHash == 1));
                     if (hash != null)
                         hashes.Add(hash);
                 }
@@ -68,17 +68,17 @@ namespace APBClient.Lobby
 
                 StringBuilder bfpBuilder = new StringBuilder();
                 XmlWriter bfpWriter = XmlWriter.Create(bfpBuilder, settings);
-                client._hardwareStore.BuildBfpSection(bfpWriter);
+                client.HardwareStore.BuildBfpSection(bfpWriter);
                 bfpWriter.Flush();
 
-                byte[] bfpHash = client._hardwareStore.BuildBfpHash();
-                byte[] windowsInfo = client._hardwareStore.BuildWindowsInfo();
+                byte[] bfpHash = client.HardwareStore.BuildBfpHash();
+                byte[] windowsInfo = client.HardwareStore.BuildWindowsInfo();
                 byte[] hwUnicodeData = Encoding.Unicode.GetBytes(hwBuilder.ToString());
                 byte[] bfpUnicodeData = Encoding.Unicode.GetBytes(bfpBuilder.ToString());
-                byte[] encryptedHWData = WindowsRSA.EncryptData(client._serverEncryptEngine, hwUnicodeData);
-                byte[] encryptedBFPData = WindowsRSA.EncryptData(client._serverEncryptEngine, bfpUnicodeData);
-                byte[] encryptedHashBlock = WindowsRSA.EncryptData(client._serverEncryptEngine, hashBlock);
-                var hardwareInfo = new GC2LS_HARDWARE_INFO(windowsInfo, 0, 0, client._hardwareStore.BfpVersion, bfpHash, encryptedHashBlock, encryptedBFPData, encryptedHWData);
+                byte[] encryptedHWData = WindowsRSA.EncryptData(client.ServerEncryptEngine, hwUnicodeData);
+                byte[] encryptedBFPData = WindowsRSA.EncryptData(client.ServerEncryptEngine, bfpUnicodeData);
+                byte[] encryptedHashBlock = WindowsRSA.EncryptData(client.ServerEncryptEngine, hashBlock);
+                var hardwareInfo = new GC2LS_HARDWARE_INFO(windowsInfo, 0, 0, client.HardwareStore.BfpVersion, bfpHash, encryptedHashBlock, encryptedBFPData, encryptedHWData);
                 client.SendPacket(hardwareInfo);
             }
         }

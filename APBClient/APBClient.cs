@@ -19,29 +19,27 @@ namespace APBClient
 
         class VirtualTCS<T> : IGenericTCS
         {
-            private TaskCompletionSource<T> _tcs;
+            private TaskCompletionSource<T> TCS;
 
             public VirtualTCS()
             {
-                _tcs = new TaskCompletionSource<T>();
+                TCS = new TaskCompletionSource<T>();
             }
 
             public void SetResult(object result)
             {
-                _tcs.SetResult((T)result);
+                TCS.SetResult((T)result);
             }
 
             public void SetTaskException(Exception e)
             {
-                Task<T> task = _tcs.Task;
+                Task<T> task = TCS.Task;
                 if (task?.Status == TaskStatus.WaitingForActivation)
-                {
-                    _tcs.SetException(e);
-                }
+                    TCS.SetException(e);
             }
 
-            public Task<T> Task => _tcs.Task;
-            public Task BaseTask => _tcs.Task;
+            public Task<T> Task => TCS.Task;
+            public Task BaseTask => TCS.Task;
         }
 
         [AttributeUsage(AttributeTargets.Method)]
@@ -76,24 +74,22 @@ namespace APBClient
             WorldServerDistrictEnterComplete
         }
 
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         private const string LobbyHost = "apb.login.gamersfirst.com";
         private const int LobbyPort = 1001;
 
-        private ISocketFactory _socketFactory;
-        private LobbyClient _lobbyClient;
-        private WorldClient _worldClient;
-        private ClientState _state;
-        private IGenericTCS _activeTask;
-        private List<CharacterInfo> _characters;
-        private Dictionary<int, DistrictInfo> _districtMap;
-        private ClanInfo _clanInfo;
-        private string _clanMotd;
+        private ISocketFactory SocketFactory;
+        private LobbyClient LobbyClient;
+        private WorldClient WorldClient;
+        private ClientState State;
+        private IGenericTCS ActiveTask;
+        private List<CharacterInfo> Characters;
+        private Dictionary<int, DistrictInfo> DistrictMap;
+        private ClanInfo ClanInfo;
+        private string ClanMOTD;
 
         public APBClient(string username, string password, HardwareStore hw, ISocketFactory socketFactory = null)
         {
-            _socketFactory = socketFactory;
+            SocketFactory = socketFactory;
             SetupLobbyClient(username, password, hw);
         }
 
@@ -104,7 +100,7 @@ namespace APBClient
             {
                 return (sender, e) =>
                 {
-                    if (EnsureState(attribute.RequiredState, $"{handler.Method.Name} called in unexpected state (Expected = {attribute.RequiredState}, Actual = {_state})"))
+                    if (EnsureState(attribute.RequiredState, $"{handler.Method.Name} called in unexpected state (Expected = {attribute.RequiredState}, Actual = {State})"))
                         handler(sender, e);
                 };
             }
@@ -114,9 +110,9 @@ namespace APBClient
 
         private bool EnsureState(ClientState requiredState, string errMessage)
         {
-            if (_state != requiredState)
+            if (State != requiredState)
             {
-                _activeTask.SetTaskException(new Exception(errMessage));
+                ActiveTask.SetTaskException(new Exception(errMessage));
                 Disconnect();
                 return false;
             }
@@ -126,137 +122,137 @@ namespace APBClient
 
         public void Disconnect()
         {
-            _state = ClientState.Disconnected;
-            _lobbyClient?.Disconnect();
-            _worldClient?.Disconnect();
+            State = ClientState.Disconnected;
+            LobbyClient?.Disconnect();
+            WorldClient?.Disconnect();
         }
 
         #region Lobby Client
         private void SetupLobbyClient(string username, string password, HardwareStore hw)
         {
-            _lobbyClient = new LobbyClient(username, password, hw, _socketFactory);
-            _lobbyClient.OnConnectSuccess += GenerateEventHandler<EventArgs>(HandleLobbyConnectSuccess);
-            _lobbyClient.OnDisconnect += GenerateEventHandler<EventArgs>(HandleLobbyDisconnect);
-            _lobbyClient.OnLoginSuccess += GenerateEventHandler<EventArgs>(HandleLoginSuccess);
-            _lobbyClient.OnCharacterList += GenerateEventHandler<List<CharacterInfo>>(HandleCharacterList);
-            _lobbyClient.OnGetWorldListSuccess += GenerateEventHandler<List<WorldInfo>>(HandleWorldListSuccess);
-            _lobbyClient.OnGetWorldListFailed += GenerateEventHandler<int>(HandleWorldListFailed);
-            _lobbyClient.OnWorldEnterSuccess += GenerateEventHandler<WorldEnterData>(HandleLobbyWorldEnterSuccess);
-            _lobbyClient.OnGetCharacterInfoSuccess += GenerateEventHandler<CharacterInfo.Detailed>(HandleLobbyGetInfo);
-            _characters = null;
+            LobbyClient = new LobbyClient(username, password, hw, SocketFactory);
+            LobbyClient.OnConnectSuccess += GenerateEventHandler<EventArgs>(HandleLobbyConnectSuccess);
+            LobbyClient.OnDisconnect += GenerateEventHandler<EventArgs>(HandleLobbyDisconnect);
+            LobbyClient.OnLoginSuccess += GenerateEventHandler<EventArgs>(HandleLoginSuccess);
+            LobbyClient.OnCharacterList += GenerateEventHandler<List<CharacterInfo>>(HandleCharacterList);
+            LobbyClient.OnGetWorldListSuccess += GenerateEventHandler<List<WorldInfo>>(HandleWorldListSuccess);
+            LobbyClient.OnGetWorldListFailed += GenerateEventHandler<int>(HandleWorldListFailed);
+            LobbyClient.OnWorldEnterSuccess += GenerateEventHandler<WorldEnterData>(HandleLobbyWorldEnterSuccess);
+            LobbyClient.OnGetCharacterInfoSuccess += GenerateEventHandler<CharacterInfo.Detailed>(HandleLobbyGetInfo);
+            Characters = null;
         }
 
         private void HandleLobbyDisconnect(object sender, EventArgs e)
         {
-            if (_state >= ClientState.LobbyServerWorldEnterComplete)
+            if (State >= ClientState.LobbyServerWorldEnterComplete)
                 return;
 
-            _state = ClientState.Disconnected;
-            _activeTask.SetTaskException(new Exception("Connection closed while processing"));
+            State = ClientState.Disconnected;
+            ActiveTask.SetTaskException(new Exception("Connection closed while processing"));
         }
 
         [RequiredState(ClientState.LobbyServerConnectInProgress)]
         private void HandleLobbyConnectSuccess(object sender, EventArgs e)
         {
-            _state = ClientState.LobbyServerLoginInProgress;
+            State = ClientState.LobbyServerLoginInProgress;
         }
 
         [RequiredState(ClientState.LobbyServerLoginInProgress)]
         private void HandleLoginSuccess(object sender, EventArgs e)
         {
-            _state = ClientState.LobbyServerLoginComplete;
+            State = ClientState.LobbyServerLoginComplete;
         }
 
         [RequiredState(ClientState.LobbyServerLoginComplete)]
         private void HandleCharacterList(object sender, List<CharacterInfo> e)
         {
-            _state = ClientState.LobbyServerCharacterListReceived;
-            _characters = e;
-            _activeTask?.SetResult(null);
+            State = ClientState.LobbyServerCharacterListReceived;
+            Characters = e;
+            ActiveTask?.SetResult(null);
         }
 
         [RequiredState(ClientState.LobbyServerWorldListInProgress)]
         private void HandleWorldListSuccess(object sender, List<WorldInfo> e)
         {
-            _state = ClientState.LobbyServerCharacterListReceived;
-            _activeTask?.SetResult(e);
+            State = ClientState.LobbyServerCharacterListReceived;
+            ActiveTask?.SetResult(e);
         }
 
         [RequiredState(ClientState.LobbyServerWorldListInProgress)]
         private void HandleWorldListFailed(object sender, int e)
         {
-            _state = ClientState.LobbyServerCharacterListReceived;
-            _activeTask?.SetTaskException(new Exception($"Failed to retrieve world list (Return code = {e})"));
+            State = ClientState.LobbyServerCharacterListReceived;
+            ActiveTask?.SetTaskException(new Exception($"Failed to retrieve world list (Return code = {e})"));
         }
 
         [RequiredState(ClientState.LobbyServerWorldEnterInProgress)]
         private void HandleLobbyWorldEnterSuccess(object sender, WorldEnterData e)
         {
-            _state = ClientState.LobbyServerWorldEnterComplete;
-            SetupWorldClient(_lobbyClient.GetEncryptionKey(), _lobbyClient.GetAccountId(), e.Timestamp);
-            _state = ClientState.WorldServerConnectInProgress;
-           _worldClient.Connect(e.WorldServerIpAddress.ToString(), e.WorldServerPort);
+            State = ClientState.LobbyServerWorldEnterComplete;
+            SetupWorldClient(LobbyClient.GetEncryptionKey(), LobbyClient.GetAccountId(), e.Timestamp);
+            State = ClientState.WorldServerConnectInProgress;
+            WorldClient.Connect(e.WorldServerIpAddress.ToString(), e.WorldServerPort);
         }
 
         [RequiredState(ClientState.LobbyServerCharacterListReceived)]
         private void HandleLobbyGetInfo(object sender, CharacterInfo.Detailed e)
         {
-            _activeTask?.SetResult(e);
+            ActiveTask?.SetResult(e);
         }
 
         public Task Login()
         {
-            if (_state != ClientState.Disconnected)
+            if (State != ClientState.Disconnected)
                 throw new InvalidOperationException("Client not in disconnected state");
 
             var tcs = new VirtualTCS<object>();
-            _activeTask = tcs;
-            _state = ClientState.LobbyServerConnectInProgress;
-            _lobbyClient.Connect(LobbyHost, LobbyPort);
+            ActiveTask = tcs;
+            State = ClientState.LobbyServerConnectInProgress;
+            LobbyClient.Connect(LobbyHost, LobbyPort);
 
             return tcs.Task;
         }
 
         public List<CharacterInfo> GetCharacters()
         {
-            if (_characters == null)
+            if (Characters == null)
                 throw new InvalidOperationException("Client has not received characters yet");
 
-            return _characters;
+            return Characters;
         }
 
         public Task<CharacterInfo.Detailed> GetDetailedCharacterInfo(int characterSlot)
         {
-            if (_state != ClientState.LobbyServerCharacterListReceived)
+            if (State != ClientState.LobbyServerCharacterListReceived)
                 throw new InvalidOperationException("Client has not received characters");
 
             var tcs = new VirtualTCS<CharacterInfo.Detailed>();
-            _activeTask = tcs;
-            _lobbyClient.GetDetailedCharacterInfo(characterSlot);
+            ActiveTask = tcs;
+            LobbyClient.GetDetailedCharacterInfo(characterSlot);
             return tcs.Task;
         }
 
         public Task<List<WorldInfo>> GetWorlds()
         {
-            if (_state != ClientState.LobbyServerCharacterListReceived)
+            if (State != ClientState.LobbyServerCharacterListReceived)
                 throw new InvalidOperationException("Client has not received characters");
 
             var tcs = new VirtualTCS<List<WorldInfo>>();
-            _activeTask = tcs;
-            _state = ClientState.LobbyServerWorldListInProgress;
-            _lobbyClient.GetWorldList();
+            ActiveTask = tcs;
+            State = ClientState.LobbyServerWorldListInProgress;
+            LobbyClient.GetWorldList();
             return tcs.Task;
         }
 
         public Task<FinalWorldEnterData> EnterWorld(int characterSlotNumber)
         {
-            if (_state != ClientState.LobbyServerCharacterListReceived)
+            if (State != ClientState.LobbyServerCharacterListReceived)
                 throw new InvalidOperationException("Client has not received characters or busy");
 
             var tcs = new VirtualTCS<FinalWorldEnterData>();
-            _activeTask = tcs;
-            _state = ClientState.LobbyServerWorldEnterInProgress;
-            _lobbyClient.EnterWorld(characterSlotNumber);
+            ActiveTask = tcs;
+            State = ClientState.LobbyServerWorldEnterInProgress;
+            LobbyClient.EnterWorld(characterSlotNumber);
             return tcs.Task;
         }
         #endregion
@@ -264,142 +260,142 @@ namespace APBClient
         #region World Client
         private void SetupWorldClient(byte[] encryptionKey, uint accountId, ulong timestamp)
         {
-            _worldClient = new WorldClient(encryptionKey, accountId, timestamp, _socketFactory);
-            _worldClient.OnConnectSuccess += GenerateEventHandler<EventArgs>(HandleWorldConnectSuccess);
-            _worldClient.OnDisconnect += GenerateEventHandler<EventArgs>(HandleWorldDisconnect);
-            _worldClient.OnWorldEnterSuccess += GenerateEventHandler<FinalWorldEnterData>(HandleWorldEnterSuccess);
-            _worldClient.OnInstanceListSuccess += GenerateEventHandler<List<InstanceInfo>>(HandleInstanceListSuccess);
-            _worldClient.OnDistrictListSuccess += GenerateEventHandler<List<DistrictInfo>>(HandleDistrictListSuccess);
-            _worldClient.OnDistrictReserveSuccess += GenerateEventHandler<ReserveInfo>(HandleDistrictReserveSuccess);
-            _worldClient.OnDistrictReserveFailed += GenerateEventHandler<int>(HandleDistrictReserveFailed);
-            _worldClient.OnDistrictEnterSuccess += GenerateEventHandler<DistrictEnterInfo>(HandleDistrictEnterSuccess);
-            _worldClient.OnDistrictEnterFailed += GenerateEventHandler<int>(HandleDistrictEnterFailed);
-            _worldClient.OnGetClanInfoSuccess += GenerateEventHandler<ClanInfo>(HandleGetClanInfoSuccess);
-            _worldClient.OnGetClanMOTDSuccess += GenerateEventHandler<string>(HandleGetClanMOTDSuccess);
-            _districtMap = null;
-            _clanInfo = null;
-            _clanMotd = null;
+            WorldClient = new WorldClient(encryptionKey, accountId, timestamp, SocketFactory);
+            WorldClient.OnConnectSuccess += GenerateEventHandler<EventArgs>(HandleWorldConnectSuccess);
+            WorldClient.OnDisconnect += GenerateEventHandler<EventArgs>(HandleWorldDisconnect);
+            WorldClient.OnWorldEnterSuccess += GenerateEventHandler<FinalWorldEnterData>(HandleWorldEnterSuccess);
+            WorldClient.OnInstanceListSuccess += GenerateEventHandler<List<InstanceInfo>>(HandleInstanceListSuccess);
+            WorldClient.OnDistrictListSuccess += GenerateEventHandler<List<DistrictInfo>>(HandleDistrictListSuccess);
+            WorldClient.OnDistrictReserveSuccess += GenerateEventHandler<ReserveInfo>(HandleDistrictReserveSuccess);
+            WorldClient.OnDistrictReserveFailed += GenerateEventHandler<int>(HandleDistrictReserveFailed);
+            WorldClient.OnDistrictEnterSuccess += GenerateEventHandler<DistrictEnterInfo>(HandleDistrictEnterSuccess);
+            WorldClient.OnDistrictEnterFailed += GenerateEventHandler<int>(HandleDistrictEnterFailed);
+            WorldClient.OnGetClanInfoSuccess += GenerateEventHandler<ClanInfo>(HandleGetClanInfoSuccess);
+            WorldClient.OnGetClanMOTDSuccess += GenerateEventHandler<string>(HandleGetClanMOTDSuccess);
+            DistrictMap = null;
+            ClanInfo = null;
+            ClanMOTD = null;
         }
 
         private void HandleWorldDisconnect(object sender, EventArgs e)
         {
-            _state = ClientState.Disconnected;
-            _activeTask?.SetTaskException(new Exception("Connection closed while processing"));
+            State = ClientState.Disconnected;
+            ActiveTask?.SetTaskException(new Exception("Connection closed while processing"));
         }
 
         [RequiredState(ClientState.WorldServerConnectInProgress)]
         private void HandleWorldConnectSuccess(object sender, EventArgs e)
         {
-            _state = ClientState.WorldServerConnectComplete;
+            State = ClientState.WorldServerConnectComplete;
         }
 
         [RequiredState(ClientState.WorldServerConnectComplete)]
         private void HandleDistrictListSuccess(object sender, List<DistrictInfo> e)
         {
-            _districtMap = new Dictionary<int, DistrictInfo>();
+            DistrictMap = new Dictionary<int, DistrictInfo>();
             foreach (DistrictInfo district in e)
-                _districtMap[district.DistrictUid] = district;
+                DistrictMap[district.DistrictUid] = district;
         }
 
         [RequiredState(ClientState.WorldServerConnectComplete)]
         private void HandleGetClanInfoSuccess(object sender, ClanInfo e)
         {
-            _clanInfo = e;
+            ClanInfo = e;
         }
 
         [RequiredState(ClientState.WorldServerConnectComplete)]
         private void HandleGetClanMOTDSuccess(object sender, string e)
         {
-            _clanMotd = e;
+            ClanMOTD = e;
         }
 
         [RequiredState(ClientState.WorldServerConnectComplete)]
         private void HandleWorldEnterSuccess(object sender, FinalWorldEnterData e)
         {
-            _state = ClientState.WorldServerWorldEnterComplete;
-            _activeTask?.SetResult(e);
+            State = ClientState.WorldServerWorldEnterComplete;
+            ActiveTask?.SetResult(e);
         }
 
         [RequiredState(ClientState.WorldServerInstanceListInProgress)]
         private void HandleInstanceListSuccess(object sender, List<InstanceInfo> e)
         {
-            _state = ClientState.WorldServerWorldEnterComplete;
-            _activeTask?.SetResult(e);
+            State = ClientState.WorldServerWorldEnterComplete;
+            ActiveTask?.SetResult(e);
         }
 
         [RequiredState(ClientState.WorldServerDistrictReserveInProgress)]
         private void HandleDistrictReserveSuccess(object sender, ReserveInfo reserveInfo)
         {
-            _worldClient.AskDistrictEnter();
-            _state = ClientState.WorldServerDistrictEnterInProgress;
+            WorldClient.AskDistrictEnter();
+            State = ClientState.WorldServerDistrictEnterInProgress;
         }
 
         [RequiredState(ClientState.WorldServerDistrictReserveInProgress)]
         private void HandleDistrictReserveFailed(object sender, int e)
         {
-            _state = ClientState.WorldServerWorldEnterComplete;
-            _activeTask?.SetTaskException(new Exception($"Failed to reserve district (Error Code = {e})"));
+            State = ClientState.WorldServerWorldEnterComplete;
+            ActiveTask?.SetTaskException(new Exception($"Failed to reserve district (Error Code = {e})"));
         }
 
         [RequiredState(ClientState.WorldServerDistrictEnterInProgress)]
         private void HandleDistrictEnterSuccess(object sender, DistrictEnterInfo enterInfo)
         {
-            _state = ClientState.WorldServerDistrictEnterComplete;
-            _activeTask?.SetResult(enterInfo);
+            State = ClientState.WorldServerDistrictEnterComplete;
+            ActiveTask?.SetResult(enterInfo);
         }
 
         [RequiredState(ClientState.WorldServerDistrictEnterInProgress)]
         private void HandleDistrictEnterFailed(object send, int e)
         {
-            _state = ClientState.WorldServerWorldEnterComplete;
-            _activeTask?.SetTaskException(new Exception($"Failed to enter district (Error Code = {e})"));
+            State = ClientState.WorldServerWorldEnterComplete;
+            ActiveTask?.SetTaskException(new Exception($"Failed to enter district (Error Code = {e})"));
         }
 
         public Dictionary<int, DistrictInfo> GetDistricts()
         {
-            if (_districtMap == null)
+            if (DistrictMap == null)
                 throw new InvalidOperationException("Client has not entered world yet");
 
-            return _districtMap;
+            return DistrictMap;
         }
 
         public ClanInfo GetClanInfo()
         {
-            if (_clanInfo == null)
+            if (ClanInfo == null)
                 throw new InvalidOperationException("Client has not entered world yet");
 
-            return _clanInfo;
+            return ClanInfo;
         }
 
         public string GetClanMOTD()
         {
-            if (_clanMotd == null)
+            if (ClanMOTD == null)
                 throw new InvalidOperationException("Client has not entered world yet");
 
-            return _clanMotd;
+            return ClanMOTD;
         }
 
         public Task<List<InstanceInfo>> GetInstances()
         {
-            if (_state != ClientState.WorldServerWorldEnterComplete)
+            if (State != ClientState.WorldServerWorldEnterComplete)
                 throw new InvalidOperationException("Client has not entered world");
 
             var tcs = new VirtualTCS<List<InstanceInfo>>();
-            _activeTask = tcs;
-            _state = ClientState.WorldServerInstanceListInProgress;
-            _worldClient.GetInstanceList();
+            ActiveTask = tcs;
+            State = ClientState.WorldServerInstanceListInProgress;
+            WorldClient.GetInstanceList();
             return tcs.Task;
         }
 
         public Task<DistrictEnterInfo> JoinInstance(InstanceInfo instance)
         {
-            if (_state != ClientState.WorldServerWorldEnterComplete)
+            if (State != ClientState.WorldServerWorldEnterComplete)
                 throw new InvalidOperationException("Client has not entered world");
 
             var tcs = new VirtualTCS<DistrictEnterInfo>();
-            _activeTask = tcs;
-            _state = ClientState.WorldServerDistrictReserveInProgress;
-            _worldClient.AskDistrictReserve(instance.DistrictUid, instance.InstanceNum, -1, false);
+            ActiveTask = tcs;
+            State = ClientState.WorldServerDistrictReserveInProgress;
+            WorldClient.AskDistrictReserve(instance.DistrictUid, instance.InstanceNum, -1, false);
             return tcs.Task;
         }
         #endregion

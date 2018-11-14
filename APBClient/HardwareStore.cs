@@ -44,42 +44,41 @@ namespace APBClient
             public uint InstallDate { get; set; }
         }
 
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly HardwareDb _hardwareDb;
-        public int BfpVersion => _hardwareDb.BfpVersion;
+        private readonly HardwareDb HardwareDB;
+        public int BfpVersion => HardwareDB.BfpVersion;
 
         public HardwareStore(TextReader reader)
         {
             var deserializer = new Deserializer();
-            _hardwareDb = deserializer.Deserialize<HardwareDb>(reader);
+            HardwareDB = deserializer.Deserialize<HardwareDb>(reader);
         }
 
         private WmiSection GetSection(string sectionName)
         {
-            if (!_hardwareDb.WmiSections.ContainsKey(sectionName))
+            if (!HardwareDB.WmiSections.ContainsKey(sectionName))
                 throw new Exception($"No WMI data present for {sectionName}");
 
-            return _hardwareDb.WmiSections[sectionName];
+            return HardwareDB.WmiSections[sectionName];
         }
 
         public byte[] BuildWindowsInfo()
         {
             var data = new byte[33];
-            Buffer.BlockCopy(BitConverter.GetBytes(_hardwareDb.WindowsVersion.MajorVersion), 0, data, 0, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(_hardwareDb.WindowsVersion.MinorVersion), 0, data, 4, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(_hardwareDb.WindowsVersion.ProductType), 0, data, 8, 1);
-            Buffer.BlockCopy(BitConverter.GetBytes(_hardwareDb.WindowsVersion.BuildNumber), 0, data, 9, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(_hardwareDb.InstallDate), 0, data, 13, 4);
-            Buffer.BlockCopy(Guid.Parse(_hardwareDb.HddGuid).ToByteArray(), 0, data, 17, 16);
+            Buffer.BlockCopy(BitConverter.GetBytes(HardwareDB.WindowsVersion.MajorVersion), 0, data, 0, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(HardwareDB.WindowsVersion.MinorVersion), 0, data, 4, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(HardwareDB.WindowsVersion.ProductType), 0, data, 8, 1);
+            Buffer.BlockCopy(BitConverter.GetBytes(HardwareDB.WindowsVersion.BuildNumber), 0, data, 9, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(HardwareDB.InstallDate), 0, data, 13, 4);
+            Buffer.BlockCopy(Guid.Parse(HardwareDB.HddGuid).ToByteArray(), 0, data, 17, 16);
             return data;
         }
 
         public void BuildBfpSection(XmlWriter writer)
         {
             writer.WriteStartElement("BFP");
-            writer.WriteAttributeString("bfp_v", _hardwareDb.BfpVersion.ToString());
-            writer.WriteAttributeString("smb_v", _hardwareDb.SmbiosVersion);
-            foreach (var section in _hardwareDb.BfpSections)
+            writer.WriteAttributeString("bfp_v", HardwareDB.BfpVersion.ToString());
+            writer.WriteAttributeString("smb_v", HardwareDB.SmbiosVersion);
+            foreach (var section in HardwareDB.BfpSections)
             {
                 var sectionName = section.Key;
                 var data = section.Value;
@@ -109,7 +108,7 @@ namespace APBClient
         {
             var memStream = new MemoryStream(512);
             var writer = new BinaryWriter(memStream);
-            var bfp = _hardwareDb.BfpSections;
+            var bfp = HardwareDB.BfpSections;
             foreach (var section in bfp)
             {
                 var sectionName = section.Key;
@@ -152,8 +151,7 @@ namespace APBClient
         public byte[] BuildWmiSectionAndHash(XmlWriter writer, string sectionName, string select, string from, bool skipHash)
         {
             WmiSection section = GetSection(sectionName);
-            if (section.Select != select || section.From != from)
-                Log.Warn($"Queries do not match for '{sectionName}' section: request=SELECT {section.Select + section.From}, saved=SELECT {select + from}");
+            if (section.Select != select || section.From != from);
 
             var stringValues = new List<string>();
             var numericValues = new List<int>();
@@ -177,10 +175,7 @@ namespace APBClient
                     }
 
                     if (!dataEntry.ContainsKey(actualFieldName))
-                    {
-                        Log.Warn($"Missing field '{fieldName}' from a data entry in the '{sectionName}' section");
                         continue;
-                    }
 
                     string fieldValue = dataEntry[actualFieldName];
                     writer.WriteStartElement(actualFieldName);

@@ -6,28 +6,26 @@ namespace APBClient.Networking
 {
     public class ProxySocketFactory : ISocketFactory
     {
-        private string _proxyIP;
-        private int _proxyPort;
-        private string _proxyUsername;
-        private string _proxyPassword;
+        private string ProxyIP, ProxyUsername, ProxyPassword;
+        private int ProxyPort;
 
         public ProxySocketFactory(string proxyIP, int proxyPort, string proxyUsername, string proxyPassword)
         {
-            _proxyIP = proxyIP;
-            _proxyPort = proxyPort;
-            _proxyUsername = proxyUsername;
-            _proxyPassword = proxyPassword;
+            ProxyIP = proxyIP;
+            ProxyPort = proxyPort;
+            ProxyUsername = proxyUsername;
+            ProxyPassword = proxyPassword;
         }
 
         public ProxySocket CreateSocket()
         {
             var socket = new ProxySocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.ProxyEndPoint = new IPEndPoint(IPAddress.Parse(_proxyIP), _proxyPort);
+            socket.ProxyEndPoint = new IPEndPoint(IPAddress.Parse(ProxyIP), ProxyPort);
             socket.ProxyType = ProxyTypes.Socks5;
-            if (_proxyUsername != null && _proxyPassword != null)
+            if (ProxyUsername != null && ProxyPassword != null)
             {
-                socket.ProxyUser = _proxyUsername;
-                socket.ProxyPass = _proxyPassword;
+                socket.ProxyUser = ProxyUsername;
+                socket.ProxyPass = ProxyPassword;
             }
             return socket;
         }

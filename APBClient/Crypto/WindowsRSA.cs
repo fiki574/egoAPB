@@ -11,8 +11,7 @@ namespace APBClient.Crypto
     {
         public static RsaKeyParameters ReadPublicKeyBlob(BinaryReader reader)
         {
-            byte type = reader.ReadByte();
-            byte version = reader.ReadByte();
+            byte type = reader.ReadByte(), version = reader.ReadByte();
             reader.ReadUInt16();
             uint algId = reader.ReadUInt32();
 
@@ -24,8 +23,7 @@ namespace APBClient.Crypto
                 throw new Exception($"Incorrect RSAPUBKEY magic ({magic[0]}, {magic[1]}, {magic[2]}, {magic[3]})");
 
             uint bitLength = reader.ReadUInt32();
-            byte[] exponent = reader.ReadBytes(4);
-            byte[] modulus = reader.ReadBytes((int)bitLength / 8);
+            byte[] exponent = reader.ReadBytes(4), modulus = reader.ReadBytes((int)bitLength / 8);
             
             Array.Reverse(exponent);
             Array.Reverse(modulus);
@@ -36,10 +34,10 @@ namespace APBClient.Crypto
 
         public static byte[] CreatePublicKeyBlob(RsaKeyParameters publicKey)
         {
-            byte[] header = { 0x06, 0x02, 0x00, 0x00, 0x00, 0xA4, 0x00, 0x00, 0x52, 0x53, 0x41, 0x31 };
-            byte[] bitLength = BitConverter.GetBytes(publicKey.Modulus.BitLength);
-            byte[] exponent = publicKey.Exponent.ToByteArrayUnsigned();
-            byte[] modulus = publicKey.Modulus.ToByteArrayUnsigned();
+            byte[] header = { 0x06, 0x02, 0x00, 0x00, 0x00, 0xA4, 0x00, 0x00, 0x52, 0x53, 0x41, 0x31 },
+                bitLength = BitConverter.GetBytes(publicKey.Modulus.BitLength),
+                exponent = publicKey.Exponent.ToByteArrayUnsigned(),
+                modulus = publicKey.Modulus.ToByteArrayUnsigned();
 
             int blobSize = header.Length + 4 + 4 + modulus.Length;
             byte[] blob = new byte[blobSize];
@@ -58,13 +56,9 @@ namespace APBClient.Crypto
 
         public static byte[] EncryptData(Pkcs1Encoding engine, byte[] data)
         {
-            int inputBlockSize = engine.GetInputBlockSize();
-            int totalBlocks = (data.Length + inputBlockSize - 1) / inputBlockSize;
-
+            int inputBlockSize = engine.GetInputBlockSize(), totalBlocks = (data.Length + inputBlockSize - 1) / inputBlockSize;
             byte[] result = new byte[totalBlocks * engine.GetOutputBlockSize()];
-
-            int inputOffset = 0;
-            int outputOffset = 0;
+            int inputOffset = 0, outputOffset = 0;
 
             while (inputOffset < data.Length)
             {

@@ -5,16 +5,16 @@ namespace APBClient.Networking
 {
     public class ClientPacket
     {
-        private byte[] _data;
+        private byte[] Data;
         protected APBBinaryWriter Writer { get; private set; }
         public int TotalSize { get; private set; }
         protected uint OpCode { get; set; }
 
         protected void AllocateData(int size)
         {
-            _data = new byte[size];
+            Data = new byte[size];
             TotalSize = size;
-            Writer = new APBBinaryWriter(new MemoryStream(_data));
+            Writer = new APBBinaryWriter(new MemoryStream(Data));
             Writer.Seek(8, SeekOrigin.Begin);
         }
 
@@ -23,7 +23,7 @@ namespace APBClient.Networking
             Writer.Seek(0, SeekOrigin.Begin);
             Writer.Write(TotalSize);
             Writer.Write(OpCode);
-            return _data;
+            return Data;
         }
     }
 }

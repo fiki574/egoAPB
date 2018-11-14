@@ -17,7 +17,6 @@ namespace APBClient.World
                 int returnCode = reader.ReadInt32();
                 if (returnCode != 0)
                 {
-                    Log.Error($"WS2GC_ANS_DISTRICT_ENTER response had invalid return code {returnCode}");
                     client.OnDistrictEnterFailed(client, returnCode);
                     return;
                 }
@@ -32,7 +31,7 @@ namespace APBClient.World
 
                 var timestampBytes = BitConverter.GetBytes(data.Timestamp);
                 var sha1 = new Sha1Digest();
-                sha1.BlockUpdate(client._encryptionKey, 0, client._encryptionKey.Length);
+                sha1.BlockUpdate(client.EncryptionKey, 0, client.EncryptionKey.Length);
                 sha1.BlockUpdate(timestampBytes, 0, timestampBytes.Length);
                 var handshakeHash = new byte[sha1.GetDigestSize()];
                 sha1.DoFinal(handshakeHash, 0);
@@ -40,7 +39,7 @@ namespace APBClient.World
                 data.HandshakeHash = handshakeHash;
 
                 sha1 = new Sha1Digest();
-                sha1.BlockUpdate(client._encryptionKey, 0, client._encryptionKey.Length);
+                sha1.BlockUpdate(client.EncryptionKey, 0, client.EncryptionKey.Length);
                 sha1.BlockUpdate(handshakeHash, 0, handshakeHash.Length);
                 var encryptionHash = new byte[sha1.GetDigestSize()];
                 sha1.DoFinal(encryptionHash, 0);
@@ -48,14 +47,6 @@ namespace APBClient.World
                 Buffer.BlockCopy(encryptionHash, 0, encryptionKey, 0, 16);
 
                 data.XXTEAKey = encryptionKey;
-
-                Log.Debug($"m_nReturnCode = {returnCode}");
-                Log.Debug($"m_nDistrictServerIPAddress = {data.DistrictServerIpAddress}");
-                Log.Debug($"m_nDistrictServerPort = {data.DistrictServerPort}");
-                Log.Debug($"m_nTimestamp = {data.Timestamp}");
-                Log.Debug($"m_bHandshakeHash = {Util.ByteToHexBitFiddle(data.HandshakeHash)}");
-                Log.Debug($"m_bXXTEAKey = {Util.ByteToHexBitFiddle(data.XXTEAKey)}");
-
                 client.OnDistrictEnterSuccess(client, data);
             }
         }

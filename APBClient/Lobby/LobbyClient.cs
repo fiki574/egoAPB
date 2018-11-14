@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using APBClient.Networking;
 using Org.BouncyCastle.Crypto.Encodings;
 
@@ -8,15 +7,11 @@ namespace APBClient.Lobby
 {
     public partial class LobbyClient : BaseClient
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        private byte[] _srpKey;
-        private Pkcs1Encoding _clientDecryptEngine;
-        private Pkcs1Encoding _serverEncryptEngine;
-        private HardwareStore _hardwareStore;
-        private string _username;
-        private string _password;
-        private uint _accountId;
+        private byte[] SrpKey;
+        private Pkcs1Encoding ClientDecryptEngine, ServerEncryptEngine;
+        private HardwareStore HardwareStore;
+        private string Username, Password;
+        private uint AccountID;
 
         public event EventHandler<ErrorData> OnError = delegate { };
         public event EventHandler<int> OnPuzzleFailed = delegate { };
@@ -32,9 +27,9 @@ namespace APBClient.Lobby
 
         public LobbyClient(string username, string password, HardwareStore hw, ISocketFactory socketFactory = null) : base(socketFactory)
         {
-            _username = username;
-            _password = password;
-            _hardwareStore = hw;
+            Username = username;
+            Password = password;
+            HardwareStore = hw;
         }
 
         public void EnterWorld(int characterSlotNumber)
@@ -57,12 +52,12 @@ namespace APBClient.Lobby
 
         public uint GetAccountId()
         {
-            return _accountId;
+            return AccountID;
         }
 
         public byte[] GetEncryptionKey()
         {
-            return _srpKey;
+            return SrpKey;
         }
     }
 }

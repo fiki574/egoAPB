@@ -6,10 +6,8 @@ namespace APBClient.Crypto
 {
     internal class NetworkRc4
     {
-        private readonly RC4Engine ServerToClient = new RC4Engine();
-        private readonly RC4Engine ClientToServer = new RC4Engine();
-
-        public bool Initialized { get; set; }
+        private readonly RC4Engine ServerToClient = new RC4Engine(), ClientToServer = new RC4Engine();
+        public bool Initialized;
 
         public void SetKey(byte[] key)
         {

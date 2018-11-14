@@ -28,18 +28,16 @@ namespace APBClient.Lobby
                 ushort serverBLen = reader.ReadUInt16();
                 byte[] salt = reader.ReadBytes(10);
 
-                client._accountId = accountId;
+                client.AccountID = accountId;
 
                 BigInteger serverBInt = new BigInteger(1, serverB, 0, serverBLen);
-                byte[] usernameBytes = Encoding.ASCII.GetBytes(accountId.ToString());
-                byte[] passwordBytes = Encoding.ASCII.GetBytes(client._password);
+                byte[] usernameBytes = Encoding.ASCII.GetBytes(accountId.ToString()), passwordBytes = Encoding.ASCII.GetBytes(client.Password);
 
                 BigInteger clientPub = srpClient.GenerateClientCredentials(salt, usernameBytes, passwordBytes);
                 srpClient.CalculateSecret(serverBInt);
-                client._srpKey = srpClient.CalculateSessionKey().ToByteArrayUnsigned();
+                client.SrpKey = srpClient.CalculateSessionKey().ToByteArrayUnsigned();
 
                 BigInteger proof = srpClient.CalculateClientEvidenceMessage();
-
                 var loginProof = new GC2LS_LOGIN_PROOF(clientPub.ToByteArrayUnsigned(), proof.ToByteArrayUnsigned());
                 client.SendPacket(loginProof);
             }

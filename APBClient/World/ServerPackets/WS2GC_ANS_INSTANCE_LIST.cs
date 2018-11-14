@@ -15,7 +15,6 @@ namespace APBClient.World
                 int returnCode = reader.ReadInt32();
                 if (returnCode != 0)
                 {
-                    Log.Error($"WS2GC_ANS_INSTANCE_LIST response had invalid return code {returnCode}");
                     client.OnInstanceListFailed(client, returnCode);
                     return;
                 }

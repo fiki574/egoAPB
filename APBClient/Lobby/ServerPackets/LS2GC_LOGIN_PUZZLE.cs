@@ -61,7 +61,7 @@ namespace APBClient.Lobby
                     }
                     puzzleSolution = puzzleData[3];
                 }
-                var askLogin = new GC2LS_ASK_LOGIN(puzzleSolution, client._username, 0);
+                var askLogin = new GC2LS_ASK_LOGIN(puzzleSolution, client.Username, 0);
                 client.SendPacket(askLogin);
             }
         }

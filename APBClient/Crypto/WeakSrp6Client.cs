@@ -8,8 +8,7 @@ namespace APBClient.Crypto
 {
     internal class WeakSrp6Client : Srp6Client
     {
-        protected byte[] Identity;
-        protected byte[] Salt;
+        protected byte[] Identity, Salt;
 
         public override BigInteger GenerateClientCredentials(byte[] salt, byte[] identity, byte[] password)
         {

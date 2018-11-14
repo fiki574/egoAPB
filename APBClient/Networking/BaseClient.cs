@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -11,14 +12,12 @@ namespace APBClient.Networking
     public abstract class BaseClient
     {
         private const int RecvBufferSize = 65535;
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private ISocketFactory _socketFactory;
-        private ProxySocket _socket;
-        private byte[] _recvBuffer = new byte[RecvBufferSize];
-        private int _nextPacketLength;
-        private int _receivedLength;
-        private NetworkRc4 _encryption = new NetworkRc4();
+        private ISocketFactory SocketFactory;
+        private ProxySocket Socket;
+        private byte[] RecvBuffer = new byte[RecvBufferSize];
+        private int NextPacketLength, ReceivedLength;
+        private NetworkRc4 Encryption = new NetworkRc4();
         private Dictionary<uint, Tuple<string, Action<BaseClient, ServerPacket>>> _packetHandlers = new Dictionary<uint, Tuple<string, Action<BaseClient, ServerPacket>>>();
 
         public event EventHandler<EventArgs> OnConnectSuccess = delegate { };
@@ -28,26 +27,26 @@ namespace APBClient.Networking
         public BaseClient(ISocketFactory socketFactory = null)
         {
             if (socketFactory == null)
-                _socketFactory = new StandardSocketFactory();
+                SocketFactory = new StandardSocketFactory();
             else
-                _socketFactory = socketFactory;
+                SocketFactory = socketFactory;
             
             SetupHandlers();
         }
 
         public void Connect(string host, int port)
         {
-            _receivedLength = 0;
-            _encryption.Initialized = false;
-            _socket = _socketFactory.CreateSocket();
-            _socket.BeginConnect(host, port, ConnectCallback, null);
+            ReceivedLength = 0;
+            Encryption.Initialized = false;
+            Socket = SocketFactory.CreateSocket();
+            Socket.BeginConnect(host, port, ConnectCallback, null);
         }
 
         private void ConnectCallback(IAsyncResult ar)
         {
             try
             {
-                _socket.EndConnect(ar);
+                Socket.EndConnect(ar);
                 OnConnectSuccess(this, null);
                 PostConnect();
                 BeginReceiveLength();
@@ -65,14 +64,14 @@ namespace APBClient.Networking
 
         public void Disconnect()
         {
-            if (_socket == null)
+            if (Socket == null)
                 return;
 
             try
             {
-                _socket.Disconnect(false);
-                _socket.Close();
-                _socket = null;
+                Socket.Disconnect(false);
+                Socket.Close();
+                Socket = null;
             }
             catch (ObjectDisposedException) {}
             catch (Exception e)
@@ -84,33 +83,33 @@ namespace APBClient.Networking
 
         private void BeginReceiveLength()
         {
-            _socket.BeginReceive(_recvBuffer, _receivedLength, 4 - _receivedLength, SocketFlags.None, ReceiveLengthCallback, null);
+            Socket.BeginReceive(RecvBuffer, ReceivedLength, 4 - ReceivedLength, SocketFlags.None, ReceiveLengthCallback, null);
         }
 
         private void BeginReceiveData()
         {
-            _socket.BeginReceive(_recvBuffer, _receivedLength, _nextPacketLength - _receivedLength, SocketFlags.None, ReceiveDataCallback, null);
+            Socket.BeginReceive(RecvBuffer, ReceivedLength, NextPacketLength - ReceivedLength, SocketFlags.None, ReceiveDataCallback, null);
         }
 
         private void ReceiveLengthCallback(IAsyncResult ar)
         {
-            if (_socket == null)
+            if (Socket == null)
                 return;
 
             try
             {
-                int length = _socket.EndReceive(ar);
+                int length = Socket.EndReceive(ar);
                 if (length <= 0)
                 {
                     Disconnect();
                     return;
                 }
 
-                _receivedLength += length;
-                if (_receivedLength == 4)
+                ReceivedLength += length;
+                if (ReceivedLength == 4)
                 {
-                    _nextPacketLength = BitConverter.ToInt32(_recvBuffer, 0) - 4;
-                    _receivedLength = 0;
+                    NextPacketLength = BitConverter.ToInt32(RecvBuffer, 0) - 4;
+                    ReceivedLength = 0;
                     BeginReceiveData();
                 }
                 else
@@ -125,20 +124,20 @@ namespace APBClient.Networking
 
         private void ReceiveDataCallback(IAsyncResult ar)
         {
-            if (_socket == null)
+            if (Socket == null)
                 return;
 
             try
             {
-                int length = _socket.EndReceive(ar);
+                int length = Socket.EndReceive(ar);
                 if (length <= 0)
                 {
                     Disconnect();
                     return;
                 }
 
-                _receivedLength += length;
-                if (_receivedLength == _nextPacketLength)
+                ReceivedLength += length;
+                if (ReceivedLength == NextPacketLength)
                 {
                     TryParsePacket();
                     BeginReceiveLength();
@@ -155,11 +154,11 @@ namespace APBClient.Networking
 
         private bool TryParsePacket()
         {
-            if (_encryption.Initialized)
-                _encryption.DecryptServerData(_recvBuffer, 0, _receivedLength);
+            if (Encryption.Initialized)
+                Encryption.DecryptServerData(RecvBuffer, 0, ReceivedLength);
 
-            var packet = new ServerPacket(_recvBuffer, 0, _receivedLength);
-            _receivedLength = 0;
+            var packet = new ServerPacket(RecvBuffer, 0, ReceivedLength);
+            ReceivedLength = 0;
             HandlePacket(packet);
             return true;
         }
@@ -173,23 +172,28 @@ namespace APBClient.Networking
             }
             else
             {
-                System.IO.File.WriteAllText($"PacketDumps/{packet.OpCode}_hex", Util.HexDump(packet.Data));
-                System.IO.File.WriteAllBytes($"PacketDumps/{packet.OpCode}_byte", packet.Data);
+                string dir = $"PacketDumps/{packet.OpCode}";
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+
+                string date = "_" + DateTime.Now.Day + DateTime.Now.Month + DateTime.Now.Year + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second;
+                File.WriteAllText($"PacketDumps/{packet.OpCode}/{date}_hex", Util.HexDump(packet.Data));
+                File.WriteAllBytes($"PacketDumps/{packet.OpCode}/{date}_byte", packet.Data);
             }
         }
 
         protected void SetEncryptionKey(byte[] key)
         {
-            _encryption.SetKey(key);
+            Encryption.SetKey(key);
         }
 
         protected void SendPacket(ClientPacket packet)
         {
             byte[] data = packet.GetDataForSending();
-            if (_encryption.Initialized)
-                _encryption.EncryptClientData(data, 4, packet.TotalSize - 4);
+            if (Encryption.Initialized)
+                Encryption.EncryptClientData(data, 4, packet.TotalSize - 4);
 
-            _socket.Send(data, 0, packet.TotalSize, SocketFlags.None); 
+            Socket.Send(data, 0, packet.TotalSize, SocketFlags.None); 
         }
 
         private void SetupHandlers()

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using APBClient.Networking;
 using Org.BouncyCastle.Crypto.Digests;
 
@@ -8,8 +7,6 @@ namespace APBClient.World
 {
     public partial class WorldClient : BaseClient
     {
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         public event EventHandler<ErrorData> OnError = delegate { };
         public event EventHandler<KickData> OnKick = delegate { };
         public event EventHandler<FinalWorldEnterData> OnWorldEnterSuccess = delegate { };
@@ -24,27 +21,27 @@ namespace APBClient.World
         public event EventHandler<ClanInfo> OnGetClanInfoSuccess = delegate { };
         public event EventHandler<string> OnGetClanMOTDSuccess = delegate { };
 
-        private byte[] _encryptionKey;
-        private uint _accountId;
-        private ulong _timestamp;
+        private byte[] EncryptionKey;
+        private uint AccountID;
+        private ulong Timestamp;
 
         public WorldClient(byte[] encryptionKey, uint accountId, ulong timestamp, ISocketFactory socketFactory = null) : base(socketFactory)
         {
-            _encryptionKey = encryptionKey;
-            _accountId = accountId;
-            _timestamp = timestamp;
+            EncryptionKey = encryptionKey;
+            AccountID = accountId;
+            Timestamp = timestamp;
         }
 
         protected override void PostConnect()
         {
             var sha1 = new Sha1Digest();
-            sha1.BlockUpdate(_encryptionKey, 0, _encryptionKey.Length);
-            sha1.BlockUpdate(BitConverter.GetBytes(_timestamp), 0, 8);
+            sha1.BlockUpdate(EncryptionKey, 0, EncryptionKey.Length);
+            sha1.BlockUpdate(BitConverter.GetBytes(Timestamp), 0, 8);
             var hash = new byte[sha1.GetDigestSize()];
             sha1.DoFinal(hash, 0);
-            var req = new GC2WS_ASK_WORLD_ENTER(_accountId, hash);
+            var req = new GC2WS_ASK_WORLD_ENTER(AccountID, hash);
             SendPacket(req);
-            SetEncryptionKey(_encryptionKey);
+            SetEncryptionKey(EncryptionKey);
         }
 
         public void GetInstanceList()

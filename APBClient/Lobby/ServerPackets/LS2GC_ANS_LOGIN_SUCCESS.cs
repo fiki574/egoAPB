@@ -39,15 +39,15 @@ namespace APBClient.Lobby
                 AsymmetricCipherKeyPair clientKeyPair = generator.GenerateKeyPair();
                 RsaKeyParameters clientPub = (RsaKeyParameters)clientKeyPair.Public;
 
-                client._clientDecryptEngine = new Pkcs1Encoding(new RsaEngine());
-                client._clientDecryptEngine.Init(false, clientKeyPair.Private);
+                client.ClientDecryptEngine = new Pkcs1Encoding(new RsaEngine());
+                client.ClientDecryptEngine.Init(false, clientKeyPair.Private);
 
                 byte[] clientPubBlob = WindowsRSA.CreatePublicKeyBlob(clientPub);
-                client._serverEncryptEngine = new Pkcs1Encoding(new RsaEngine());
-                client._serverEncryptEngine.Init(true, serverPub);
+                client.ServerEncryptEngine = new Pkcs1Encoding(new RsaEngine());
+                client.ServerEncryptEngine.Init(true, serverPub);
 
-                byte[] encryptedClientKey = WindowsRSA.EncryptData(client._serverEncryptEngine, clientPubBlob);
-                client.SetEncryptionKey(client._srpKey);
+                byte[] encryptedClientKey = WindowsRSA.EncryptData(client.ServerEncryptEngine, clientPubBlob);
+                client.SetEncryptionKey(client.SrpKey);
 
                 var keyExchange = new GC2LS_KEY_EXCHANGE(encryptedClientKey);
                 client.SendPacket(keyExchange);
