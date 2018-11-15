@@ -39,6 +39,7 @@ namespace egoAPB
                     foreach (var ch in characters)
                     {
                         CharacterInfo.Detailed charinfo = await client.GetDetailedCharacterInfo(ch.SlotNumber);
+                        detailed.Add(charinfo);
                         Console.WriteLine($"Got details for character '{ch.CharacterName}'");
                         Console.WriteLine($"\t-> Faction: {ch.Faction.ToString()}\n\t-> Gender: {charinfo.Gender.ToString()}\n\t-> Money: {charinfo.Money}$\n\t-> Jocker Tickets: {charinfo.JokerTickets}\n\t-> Rank: {charinfo.Rank}\n\t-> Clan: {charinfo.Clan}");
                         Console.WriteLine();
@@ -55,16 +56,22 @@ namespace egoAPB
                     Console.WriteLine($"Connected to world server '{ChosenCharacter.WorldName}'");
                     Console.WriteLine();
 
-                    ClanInfo clanInfo = client.GetClanInfo();
-                    clanInfo.MOTD = client.GetClanMOTD();
-                    Console.WriteLine($"Got clan info for '{clanInfo.Name}'");
-                    string motd = clanInfo.MOTD;
-                    motd = motd.Replace("\n", string.Empty);
-                    motd = motd.Replace("\r", string.Empty);
-                    motd = motd.Replace("\t", string.Empty);
-                    Console.WriteLine($"\t-> Total members: {clanInfo.Members}\n\t-> Message of the day: {motd}\n\t-> Leader ID: {clanInfo.Leader}");
+                    try
+                    {
+                        ClanInfo clanInfo = client.GetClanInfo();
+                        clanInfo.MOTD = client.GetClanMOTD();
+                        Console.WriteLine($"Got clan info for '{clanInfo.Name}'");
+                        string motd = clanInfo.MOTD;
+                        motd = motd.Replace("\n", string.Empty);
+                        motd = motd.Replace("\r", string.Empty);
+                        motd = motd.Replace("\t", string.Empty);
+                        Console.WriteLine($"\t-> Total members: {clanInfo.Members}\n\t-> Message of the day: {motd}\n\t-> Leader ID: {clanInfo.Leader}");
+                        Console.WriteLine();
+                    }
+                    catch
+                    {
+                    }
 
-                    Console.WriteLine();
                     Dictionary<int, DistrictInfo> districts = client.GetDistricts();
                     Console.WriteLine($"Got {districts.Count} districts");
 

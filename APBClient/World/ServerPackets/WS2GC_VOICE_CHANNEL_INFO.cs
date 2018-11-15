@@ -10,7 +10,9 @@ namespace APBClient.World
             public override void HandlePacket(WorldClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
-                //m_sChannelUID %d, m_nChannelType %d, m_szChannelUri %S
+                long uid = reader.ReadInt64();
+                int type = reader.ReadInt32();
+                string uri = reader.ReadASCIIString(packet.Data.Length - (int)reader.BaseStream.Position);
             }
         }
     }

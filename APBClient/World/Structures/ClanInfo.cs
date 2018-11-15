@@ -14,7 +14,7 @@
             public int Character;
             public string Name;
             public int Rank;
-            public int Status;
+            public StatusType Status;
         }
     }
 }
