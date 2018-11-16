@@ -27,6 +27,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+#pragma warning disable 0618
 
 namespace Org.Mentalis.Network.ProxySocket
 {
@@ -74,7 +75,7 @@ namespace Org.Mentalis.Network.ProxySocket
 				throw new ArgumentException("Invalid port.");
 
 			if (ProtocolType != ProtocolType.Tcp || ProxyType == ProxyTypes.None || ProxyEndPoint == null)
-				base.Connect(new IPEndPoint(Dns.Resolve(host).AddressList[0], port));
+                base.Connect(new IPEndPoint(Dns.Resolve(host).AddressList[0], port));
 			else
             {
 				base.Connect(ProxyEndPoint);
@@ -158,7 +159,8 @@ namespace Org.Mentalis.Network.ProxySocket
         {
 			try
             {
-				Dns.BeginResolve(host, new AsyncCallback(OnResolved), this);
+                #pragma warning disable 0618
+                Dns.BeginResolve(host, new AsyncCallback(OnResolved), this);
 				return new IAsyncProxyResult();
 			}
             catch

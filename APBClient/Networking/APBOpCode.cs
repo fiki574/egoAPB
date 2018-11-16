@@ -35,12 +35,11 @@
         WS2GC_CLAN_RANK_INFO = 4070,
         WS2GC_CLAN_INFO = 4071,
         WS2GC_CLAN_MOTD = 4072,
+        WS2GC_UNKNOWN_PACKET01 = 4082,
+        WS2GC_FRIENDLIST_INFO = 4087,
+        WS2GC_IGNORELIST_INFO = 4092,
+        WS2GC_UNKNOWN_PACKET02 = 4105,
         WS2GC_VOICE_CHANNEL_INFO = 4114,
-
-        //TODO
-        WS2GC_FRIENDLIST_INFO = 4087, //m_nFriends, m_nCharacterUID[], m_szCharacterName[], m_nStatus[], m_nFaction[],
-        WS2GC_CHALLENGE_OVERVIEW = 4127, //m_nNumChallenges 2, m_nDistrictUID 14, m_szRankedStatistic [activities], m_nMyRanking 0, m_nMyScore 0, m_dtChallengeEnd 2018/11/19 7:59:59, m_dtLastUpdated 2018/11/13 21:6:56, m_n1stScoreRequirement -10, m_n2ndScoreRequirement 15, m_n3rdScoreRequirement 7, m_n1stPercentageThreshold 9, m_n2ndPercentageThreshold 0, m_n3rdPercentageThreshold 0, m_n1stRedeemableRewardKey 19200, m_n2ndRedeemableRewardKey 19150, m_n3rdRedeemableRewardKey 19050, m_nTotalParticipants 0
-        WS2GC_UNKNOWN_PACKET01 = 4082, //int,int,byte OR long,byte
-        WS2GC_UNKNOWN_PACKET02 = 4105, //int,int,int,int,byte OR long,long,byte
+        WS2GC_CHALLENGE_OVERVIEW = 4127
     }
 }

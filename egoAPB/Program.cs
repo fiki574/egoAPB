@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.IO;
 using System.Collections.Generic;
 using APBClient;
@@ -14,7 +13,7 @@ namespace egoAPB
     {
         static void Main(string[] args)
         {
-            string username = "user", password = "pass", character = "char";
+            string email = "user", password = "pass", character = "char";
 
             if (!Directory.Exists("PacketDumps"))
                 Directory.CreateDirectory("PacketDumps");
@@ -27,7 +26,7 @@ namespace egoAPB
             {
                 try
                 {
-                    var client = new APBClient.APBClient(username, password, hw);
+                    var client = new APBClient.APBClient(email, password, hw);
                     await client.Login();
                     Console.WriteLine("Connected to lobby server");
 
@@ -35,13 +34,12 @@ namespace egoAPB
                     Console.WriteLine($"Got {characters.Count} characters (threat: '{characters[0].Threat}')");
                     Console.WriteLine();
 
-                    List<CharacterInfo.Detailed> detailed = new List<CharacterInfo.Detailed>(characters.Count);
                     foreach (var ch in characters)
                     {
                         CharacterInfo.Detailed charinfo = await client.GetDetailedCharacterInfo(ch.SlotNumber);
-                        detailed.Add(charinfo);
+                        ch.Details = charinfo;
                         Console.WriteLine($"Got details for character '{ch.CharacterName}'");
-                        Console.WriteLine($"\t-> Faction: {ch.Faction.ToString()}\n\t-> Gender: {charinfo.Gender.ToString()}\n\t-> Money: {charinfo.Money}$\n\t-> Jocker Tickets: {charinfo.JokerTickets}\n\t-> Rank: {charinfo.Rank}\n\t-> Clan: {charinfo.Clan}");
+                        Console.WriteLine($"\t-> Faction: {ch.Faction.ToString()}\n\t-> Gender: {charinfo.Gender.ToString()}\n\t-> Money: {ch.Details.Money}$\n\t-> Jocker Tickets: {ch.Details.JokerTickets}\n\t-> Rank: {ch.Details.Rank}\n\t-> Clan: {ch.Details.Clan}");
                         Console.WriteLine();
                     }
 
@@ -52,21 +50,28 @@ namespace egoAPB
                         Console.WriteLine($"\t-> {w.Name}, {w.Region}, {w.Status.ToString()}");
 
                     Console.WriteLine();
-                    FinalWorldEnterData worldEnterData = await client.EnterWorld(ChosenCharacter.SlotNumber);
+                    ChosenCharacter.WorldEnterData = await client.EnterWorld(ChosenCharacter.SlotNumber);
                     Console.WriteLine($"Connected to world server '{ChosenCharacter.WorldName}'");
                     Console.WriteLine();
 
                     try
                     {
-                        ClanInfo clanInfo = client.GetClanInfo();
-                        clanInfo.MOTD = client.GetClanMOTD();
-                        Console.WriteLine($"Got clan info for '{clanInfo.Name}'");
-                        string motd = clanInfo.MOTD;
+                        ChosenCharacter.Clan = client.GetClanInfo();
+                        ChosenCharacter.Clan.MOTD = client.GetClanMOTD();
+                        Console.WriteLine($"Got clan info for '{ChosenCharacter.Clan.Name}'");
+                        string motd = ChosenCharacter.Clan.MOTD;
                         motd = motd.Replace("\n", string.Empty);
                         motd = motd.Replace("\r", string.Empty);
                         motd = motd.Replace("\t", string.Empty);
-                        Console.WriteLine($"\t-> Total members: {clanInfo.Members}\n\t-> Message of the day: {motd}\n\t-> Leader ID: {clanInfo.Leader}");
+                        Console.WriteLine($"\t-> Total members: {ChosenCharacter.Clan.Members}\n\t-> Message of the day: {motd}\n\t-> Leader ID: {ChosenCharacter.Clan.Leader}");
                         Console.WriteLine();
+
+                        ChosenCharacter.Friends = client.GetFriendList();
+                        ChosenCharacter.Ignores = client.GetIgnoreList();
+                        Console.WriteLine($"Got friendlist with {ChosenCharacter.Friends.TotalFriends} friends and ignorelist with {ChosenCharacter.Ignores.TotalIgnores} ignores");
+
+                        ChosenCharacter.Challenges = client.GetChallenges();
+                        Console.WriteLine($"Got info for {ChosenCharacter.Challenges.TotalChallenges} challenges");
                     }
                     catch
                     {
@@ -74,6 +79,7 @@ namespace egoAPB
 
                     Dictionary<int, DistrictInfo> districts = client.GetDistricts();
                     Console.WriteLine($"Got {districts.Count} districts");
+                    Console.WriteLine();
 
                     List<InstanceInfo> instances = await client.GetInstances();
                     Console.WriteLine($"Got {instances.Count} instances");

@@ -24,7 +24,7 @@ namespace APBClient.Lobby
                     {
                         SlotNumber = reader.ReadByte(),
                         Faction = (FactionType)reader.ReadByte(),
-                        WorldStatus = reader.ReadByte(),
+                        WorldStatus = (StatusType)reader.ReadByte(),
                         WorldUID = reader.ReadInt32(),
                         WorldName = reader.ReadUnicodeString(34),
                         CharacterName = reader.ReadUnicodeString(34),

@@ -65,6 +65,9 @@ namespace APBClient
         private Dictionary<int, DistrictInfo> DistrictMap;
         private ClanInfo ClanInfo;
         private string ClanMOTD;
+        private FriendlistInfo Friends;
+        private IgnorelistInfo Ignores;
+        private ChallengesInfo Challenges;
 
         public APBClient(string username, string password, HardwareStore hw, ISocketFactory socketFactory = null)
         {
@@ -251,9 +254,15 @@ namespace APBClient
             WorldClient.OnDistrictEnterFailed += GenerateEventHandler<int>(HandleDistrictEnterFailed);
             WorldClient.OnGetClanInfoSuccess += GenerateEventHandler<ClanInfo>(HandleGetClanInfoSuccess);
             WorldClient.OnGetClanMOTDSuccess += GenerateEventHandler<string>(HandleGetClanMOTDSuccess);
+            WorldClient.OnGetFriendlistSuccess += GenerateEventHandler<FriendlistInfo>(HandleGetFriendlistSuccess);
+            WorldClient.OnGetIgnorelistSuccess += GenerateEventHandler<IgnorelistInfo>(HandleGetIgnorelistSuccess);
+            WorldClient.OnGetChallengesSuccess += GenerateEventHandler<ChallengesInfo>(HandleGetChallengesSuccess);
             DistrictMap = null;
             ClanInfo = null;
             ClanMOTD = null;
+            Friends = null;
+            Ignores = null;
+            Challenges = null;
         }
 
         private void HandleWorldDisconnect(object sender, EventArgs e)
@@ -286,6 +295,24 @@ namespace APBClient
         private void HandleGetClanMOTDSuccess(object sender, string e)
         {
             ClanMOTD = e;
+        }
+
+        [RequiredState(ClientState.WorldServerConnectComplete)]
+        private void HandleGetFriendlistSuccess(object sender, FriendlistInfo e)
+        {
+            Friends = e;
+        }
+
+        [RequiredState(ClientState.WorldServerConnectComplete)]
+        private void HandleGetIgnorelistSuccess(object sender, IgnorelistInfo e)
+        {
+            Ignores = e;
+        }
+
+        [RequiredState(ClientState.WorldServerConnectComplete)]
+        private void HandleGetChallengesSuccess(object sender, ChallengesInfo e)
+        {
+            Challenges = e;
         }
 
         [RequiredState(ClientState.WorldServerConnectComplete)]
@@ -333,7 +360,7 @@ namespace APBClient
         public Dictionary<int, DistrictInfo> GetDistricts()
         {
             if (DistrictMap == null)
-                throw new InvalidOperationException("Client has not entered world yet");
+                throw new InvalidOperationException("No district map");
 
             return DistrictMap;
         }
@@ -341,7 +368,7 @@ namespace APBClient
         public ClanInfo GetClanInfo()
         {
             if (ClanInfo == null)
-                throw new InvalidOperationException("Client has not entered world yet");
+                throw new InvalidOperationException("No clan info");
 
             return ClanInfo;
         }
@@ -349,9 +376,33 @@ namespace APBClient
         public string GetClanMOTD()
         {
             if (ClanMOTD == null)
-                throw new InvalidOperationException("Client has not entered world yet");
+                throw new InvalidOperationException("No MOTD");
 
             return ClanMOTD;
+        }
+
+        public FriendlistInfo GetFriendList()
+        {
+            if (Friends == null)
+                throw new InvalidOperationException("No friends");
+
+            return Friends;
+        }
+
+        public IgnorelistInfo GetIgnoreList()
+        {
+            if (Ignores == null)
+                throw new InvalidOperationException("No ignores");
+
+            return Ignores;
+        }
+
+        public ChallengesInfo GetChallenges()
+        {
+            if (Challenges == null)
+                throw new InvalidOperationException("No challenges");
+
+            return Challenges;
         }
 
         public Task<List<InstanceInfo>> GetInstances()

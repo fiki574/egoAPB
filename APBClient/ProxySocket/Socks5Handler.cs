@@ -29,6 +29,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Org.Mentalis.Network.ProxySocket.Authentication;
+#pragma warning disable 0618
 
 namespace Org.Mentalis.Network.ProxySocket
 {

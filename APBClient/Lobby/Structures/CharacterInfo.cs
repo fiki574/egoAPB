@@ -1,4 +1,5 @@
 ﻿using System;
+using APBClient.World;
 
 namespace APBClient.Lobby
 {
@@ -6,13 +7,19 @@ namespace APBClient.Lobby
     {
         public int SlotNumber;
         public FactionType Faction;
-        public int WorldStatus;
+        public StatusType WorldStatus;
         public int WorldUID;
         public string WorldName;
         public string CharacterName;
         public int Rating;
         public DateTime LastLogin;
         public ThreatType Threat;
+        public Detailed Details;
+        public ClanInfo Clan;
+        public FriendlistInfo Friends;
+        public IgnorelistInfo Ignores;
+        public FinalWorldEnterData WorldEnterData;
+        public ChallengesInfo Challenges;
 
         public class Detailed
         {

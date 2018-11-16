@@ -20,6 +20,9 @@ namespace APBClient.World
         public event EventHandler<DistrictEnterInfo> OnDistrictEnterSuccess = delegate { };
         public event EventHandler<ClanInfo> OnGetClanInfoSuccess = delegate { };
         public event EventHandler<string> OnGetClanMOTDSuccess = delegate { };
+        public event EventHandler<FriendlistInfo> OnGetFriendlistSuccess = delegate { };
+        public event EventHandler<IgnorelistInfo> OnGetIgnorelistSuccess = delegate { };
+        public event EventHandler<ChallengesInfo> OnGetChallengesSuccess = delegate { };
 
         private byte[] EncryptionKey;
         private uint AccountID;

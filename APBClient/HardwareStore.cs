@@ -150,7 +150,6 @@ namespace APBClient
         public byte[] BuildWmiSectionAndHash(XmlWriter writer, string sectionName, string select, string from, bool skipHash)
         {
             WmiSection section = GetSection(sectionName);
-            if (section.Select != select || section.From != from);
 
             var stringValues = new List<string>();
             var numericValues = new List<int>();

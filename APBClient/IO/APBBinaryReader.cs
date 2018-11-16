@@ -55,5 +55,10 @@ namespace APBClient.IO
             BaseStream.Seek(start + fieldSize, SeekOrigin.Begin);
             return sb.ToString();
         }
+
+        public void Skip(int bytes)
+        {
+            BaseStream.Position += bytes;
+        }
     }
 }

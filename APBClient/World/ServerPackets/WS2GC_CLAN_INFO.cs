@@ -13,7 +13,7 @@ namespace APBClient.World
                 var info = new ClanInfo();
                 info.Leader = reader.ReadInt32();
                 info.Name = reader.ReadUnicodeString(60);
-                reader.BaseStream.Position += 6;
+                reader.Skip(6);
                 info.Members = reader.ReadByte();
                 info.ClanMembers = new ClanInfo.ClanMember[info.Members];
                 for (int i = 0; i < info.Members; i++)

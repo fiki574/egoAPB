@@ -15,7 +15,7 @@ namespace APBClient.World
                 {
                     int uid = reader.ReadInt32();
                     string name = reader.ReadUnicodeString(16);
-                    reader.BaseStream.Position += 22;
+                    reader.Skip(22);
                 }
             }
         }
