@@ -19,7 +19,8 @@ namespace APBClient.Lobby
         public FriendlistInfo Friends;
         public IgnorelistInfo Ignores;
         public FinalWorldEnterData WorldEnterData;
-        public ChallengesInfo Challenges;
+        public ChallengesInfo ChallengesInfo;
+        public MailInfo MailsInfo;
 
         public class Detailed
         {

@@ -23,6 +23,8 @@ namespace APBClient.World
         public event EventHandler<FriendlistInfo> OnGetFriendlistSuccess = delegate { };
         public event EventHandler<IgnorelistInfo> OnGetIgnorelistSuccess = delegate { };
         public event EventHandler<ChallengesInfo> OnGetChallengesSuccess = delegate { };
+        public event EventHandler<VoiceChannelInfo> OnGetVoiceChannelSuccess = delegate { };
+        public event EventHandler<MailInfo> OnGetMailInfoSuccess = delegate { };
 
         private byte[] EncryptionKey;
         private uint AccountID;

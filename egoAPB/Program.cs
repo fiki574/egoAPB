@@ -13,7 +13,7 @@ namespace egoAPB
     {
         static void Main(string[] args)
         {
-            string email = "email", password = "pass", character = "char";
+            string email = "mail", password = "pass", character = "char";
 
             if (!Directory.Exists("PacketDumps"))
                 Directory.CreateDirectory("PacketDumps");
@@ -70,12 +70,15 @@ namespace egoAPB
                         ChosenCharacter.Ignores = client.GetIgnoreList();
                         Console.WriteLine($"Got friendlist with {ChosenCharacter.Friends.TotalFriends} friends and ignorelist with {ChosenCharacter.Ignores.TotalIgnores} ignores");
 
-                        ChosenCharacter.Challenges = client.GetChallenges();
-                        Console.WriteLine($"Got info for {ChosenCharacter.Challenges.TotalChallenges} challenges");
+                        ChosenCharacter.ChallengesInfo = client.GetChallenges();
+                        Console.WriteLine($"Got info for {ChosenCharacter.ChallengesInfo.TotalChallenges} challenges");
                     }
                     catch
                     {
                     }
+
+                    ChosenCharacter.MailsInfo = client.GetMailInfo();
+                    Console.WriteLine($"Got total of {ChosenCharacter.MailsInfo.Total} mails in inbox (unread: {ChosenCharacter.MailsInfo.Unread}, expired: {ChosenCharacter.MailsInfo.Expired})}}");
 
                     Dictionary<int, DistrictInfo> districts = client.GetDistricts();
                     Console.WriteLine($"Got {districts.Count} districts");

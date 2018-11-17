@@ -68,6 +68,8 @@ namespace APBClient
         private FriendlistInfo Friends;
         private IgnorelistInfo Ignores;
         private ChallengesInfo Challenges;
+        private VoiceChannelInfo VoiceChannel;
+        private MailInfo MailInfo;
 
         public APBClient(string username, string password, HardwareStore hw, ISocketFactory socketFactory = null)
         {
@@ -257,12 +259,17 @@ namespace APBClient
             WorldClient.OnGetFriendlistSuccess += GenerateEventHandler<FriendlistInfo>(HandleGetFriendlistSuccess);
             WorldClient.OnGetIgnorelistSuccess += GenerateEventHandler<IgnorelistInfo>(HandleGetIgnorelistSuccess);
             WorldClient.OnGetChallengesSuccess += GenerateEventHandler<ChallengesInfo>(HandleGetChallengesSuccess);
+            WorldClient.OnGetVoiceChannelSuccess += GenerateEventHandler<VoiceChannelInfo>(HandleGetVoiceChannelSuccess);
+            WorldClient.OnGetMailInfoSuccess += GenerateEventHandler<MailInfo>(HandleGetMailInfoSuccess);
+
             DistrictMap = null;
             ClanInfo = null;
             ClanMOTD = null;
             Friends = null;
             Ignores = null;
             Challenges = null;
+            VoiceChannel = null;
+            MailInfo = null;
         }
 
         private void HandleWorldDisconnect(object sender, EventArgs e)
@@ -313,6 +320,18 @@ namespace APBClient
         private void HandleGetChallengesSuccess(object sender, ChallengesInfo e)
         {
             Challenges = e;
+        }
+
+        [RequiredState(ClientState.WorldServerConnectComplete)]
+        private void HandleGetVoiceChannelSuccess(object sender, VoiceChannelInfo e)
+        {
+            VoiceChannel = e;
+        }
+
+        [RequiredState(ClientState.WorldServerConnectComplete)]
+        private void HandleGetMailInfoSuccess(object sender, MailInfo e)
+        {
+            MailInfo = e;
         }
 
         [RequiredState(ClientState.WorldServerConnectComplete)]
@@ -403,6 +422,22 @@ namespace APBClient
                 throw new InvalidOperationException("No challenges");
 
             return Challenges;
+        }
+
+        public VoiceChannelInfo GetVoiceChannel()
+        {
+            if (VoiceChannel == null)
+                throw new InvalidOperationException("No voice channel");
+
+            return VoiceChannel;
+        }
+
+        public MailInfo GetMailInfo()
+        {
+            if (MailInfo == null)
+                throw new InvalidOperationException("No mails");
+
+            return MailInfo;
         }
 
         public Task<List<InstanceInfo>> GetInstances()

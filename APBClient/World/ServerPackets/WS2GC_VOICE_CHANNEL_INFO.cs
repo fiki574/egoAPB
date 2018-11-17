@@ -10,9 +10,13 @@ namespace APBClient.World
             public override void HandlePacket(WorldClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
-                long uid = reader.ReadInt64();
-                int type = reader.ReadInt32();
-                string uri = reader.ReadASCIIString(packet.Data.Length - (int)reader.BaseStream.Position);
+                var vci = new VoiceChannelInfo()
+                {
+                    ID = reader.ReadInt64(),
+                    Type = reader.ReadInt32(),
+                    URI = reader.ReadASCIIString(packet.Data.Length - (int)reader.BaseStream.Position)
+                };
+                client.OnGetVoiceChannelSuccess(client, vci);
             }
         }
     }

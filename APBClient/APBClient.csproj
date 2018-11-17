@@ -89,10 +89,12 @@
     <Compile Include="Networking\IPacketHandler.cs" />
     <Compile Include="Networking\APBOpCode.cs" />
     <Compile Include="Networking\PacketHandlerAttribute.cs" />
+    <Compile Include="World\ServerPackets\WS2GC_MAIL_INFO.cs" />
     <Compile Include="World\ServerPackets\WS2GC_CHALLENGE_OVERVIEW.cs" />
     <Compile Include="World\ServerPackets\WS2GC_CLAN_INFO.cs" />
     <Compile Include="World\ServerPackets\WS2GC_CLAN_MOTD.cs" />
     <Compile Include="World\ServerPackets\WS2GC_CLAN_RANK_INFO.cs" />
+    <Compile Include="World\ServerPackets\WS2GC_CLAN_STATUS.cs" />
     <Compile Include="World\ServerPackets\WS2GC_FRIENDLIST_INFO.cs" />
     <Compile Include="World\ServerPackets\WS2GC_IGNORELIST_INFO.cs" />
     <Compile Include="World\ServerPackets\WS2GC_VOICE_CHANNEL_INFO.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="World\Structures\DistrictEnterInfo.cs" />
     <Compile Include="World\Structures\FriendlistInfo.cs" />
     <Compile Include="World\Structures\IgnorelistInfo.cs" />
+    <Compile Include="World\Structures\MailInfo.cs" />
     <Compile Include="World\Structures\ReserveInfo.cs" />
     <Compile Include="Networking\ServerPacket.cs" />
     <Compile Include="Networking\ProxySocketFactory.cs" />
@@ -128,6 +131,7 @@
     <Compile Include="World\ServerPackets\WS2GC_ANS_INSTANCE_LIST.cs" />
     <Compile Include="World\ServerPackets\WS2GC_ANS_WORLD_ENTER.cs" />
     <Compile Include="World\ServerPackets\WS2GC_DISTRICT_LIST.cs" />
+    <Compile Include="World\Structures\VoiceChannelInfo.cs" />
     <Compile Include="World\WorldClient.cs" />
   </ItemGroup>
   <ItemGroup>
