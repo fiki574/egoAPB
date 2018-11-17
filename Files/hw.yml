@@ -1,5 +1,4 @@
 ---
-# Data returned from WMI queries
 WmiSections:
   CPU:
     Select: "ProcessorId,Manufacturer,Name,Description,Revision,L2CacheSize,@AddressWidth"
@@ -21,18 +20,18 @@ WmiSections:
     Select: "SerialNumber,Manufacturer,Product,Version"
     From: "FROM Win32_BaseBoard"
     Data: 
-      - SerialNumber: QWERTYUIOPASDFGHJKL
-        Manufacturer: QWERTYUIOPASDFGHJKL
-        Product: QWERTYUIOPASDFGHJKL
-        Version: QWERTYUIOPASDFGHJKL
+      - SerialNumber: AAC098FF623ADDEB662
+        Manufacturer: BC000FEE64312AA1123
+        Product: DDEF023432AAC776DEF
+        Version: 1223AFFEDCB234DE1AA
 
   BIOS:
     Select: "Name,Caption,SerialNumber"
     From: "FROM Win32_BIOS"
     Data:
-      - Name: QWERTYUIOPASDFGHJKL
-        Caption: QWERTYUIOPASDFGHJKL
-        SerialNumber: QWERTYUIOPASDFGHJKL
+      - Name: A2232EBC122AFFGD348
+        Caption: A44B2EBC132AECGD259
+        SerialNumber: A211B3345C21311D555
 
   IDE:
     Select: "Manufacturer,Name,Description"
@@ -55,17 +54,17 @@ WmiSections:
       - AdapterRAM
     Data:
       - AdapterRAM: -2147483648
-        Caption: QWERTYUIOPASDFGHJKL
-        VideoProcessor: QWERTYUIOPASDFGHJKL
+        Caption: RAMDATACAP225FINEDI
+        VideoProcessor: NVIDIAGFORCEGTX1060
 
   AUD:
     Select: "Name,Manufacturer"
     From: "FROM Win32_SoundDevice WHERE Status='OK' AND (PNPDeviceId LIKE 'HDAUDIO%' OR PNPDeviceId LIKE 'PCI%')"
     Data:
-      - Name: QWERTYUIOPASDFGHJKL
-        Manufacturer: QWERTYUIOPASDFGHJKL
-      - Name: QWERTYUIOPASDFGHJKL
-        Manufacturer: QWERTYUIOPASDFGHJKL
+      - Name: SOUNDSTAGEDEFAULT01
+        Manufacturer: VIVOXVOICESERVICE01
+      - Name: SOUNDDEVICEGENID001
+        Manufacturer: SATASOUNDSERVICES01
 
   RAM:
     Select: "Capacity,PartNumber,@DeviceLocator,Manufacturer,SerialNumber,Speed"
@@ -74,16 +73,16 @@ WmiSections:
       - Speed
     Data:
       - Capacity: 8589934592
-        PartNumber: "0x000000000000000000000000000000000000"
+        PartNumber: "0x175829403892018350232185390432554323"
         DeviceLocator: DIMM0
-        Manufacturer: "0x0000"
-        SerialNumber: "0x00000000"
+        Manufacturer: "0x5566"
+        SerialNumber: "0x33456678"
         Speed: 1333
       - Capacity: 8589934592
-        PartNumber: "0x000000000000000000000000000000000000"
-        DeviceLocator: DIMM0
-        Manufacturer: "0x0000"
-        SerialNumber: "0x00000000"
+        PartNumber: "0x234872572937529349205832548509348934"
+        DeviceLocator: DIMM1
+        Manufacturer: "0x6677"
+        SerialNumber: "0x25702342"
         Speed: 1333
 
   HDD:
@@ -93,14 +92,14 @@ WmiSections:
       - Signature
     Data:
       - Size: 500269754880
-        Model: QWERTYUIOP
+        Model: TESTMODEL1
   SYS:
     Select: "IdentifyingNumber,Name,Vendor,UUID"
     From: "FROM Win32_ComputerSystemProduct"
     Data:
-      - IdentifyingNumber: QWERTYUIOPASDFGHJKL
-        Name: QWERTYUIOPASDFGHJKL
-        Vendor: QWERTYUIOPASDFGHJKL
+      - IdentifyingNumber: 238428234239858923A
+        Name: TESTINGDEVICEMODEL1
+        Vendor: TESTINGDEVICEMODELS
         UUID: 4216BDA4-5AB1-FED1-C913-832F9AB3627A
 
   OS:
@@ -108,40 +107,39 @@ WmiSections:
     From: "FROM Win32_OperatingSystem"
     Data:
       - Name: Microsoft Windows 10 Pro|C:\Windows|\Device\Harddisk0\Partition4
-        SerialNumber: 12345-12345-12345-ABCDE
-        InstallDate: 20000101010203.000000+500
+        SerialNumber: A12BC-234EF-9987B-ACD27
+        InstallDate: 20140101010203.000000+500
         CountryCode: 1
         Version: 10.0.10586
         ServicePackMajorVersion: 0
         ServicePackMinorVersion: 0
 
-# BFP Information
 SmbiosVersion: "2.4"
-# TODO: This seems to be hardcoded inside APB.exe and could change at any time, might be worth more digging. 
+
 BfpVersion: 14071501
 BfpSections:
   BIOS:
-    Vendor: QWERTYUIOPASDFGHJKL
+    Vendor: TESTINGDEVICEMODELS
     RomSize: 127
 
   SYSINFO:
-    Manufacture: QWERTYUIOPASDFGHJKL
-    ProductName: QWERTYUIOPASDFGHJKL
-    Serial: "QWERTYUIOPASDFGHJKL"
-    UUID: "{4216BDA4-5AB1-FED1-C913-832F9AB3627A}"
+    Manufacture: TESTINGDEVICEMODELS
+    ProductName: TESTINGDEVICEMODEL9
+    Serial: "1243357384834823A"
+    UUID: "{4216BDA4-5AB1-FED1-C913-832F9AB3627B}"
     SKU: "System SKU#"
 
   BASEBOARD:
-    Manufacture: QWERTYUIOPASDFGHJKL
-    Product: QWERTYUIOPASDFGHJKL
-    Version: QWERTYUIOPASDFGHJKL
-    Serial: QWERTYUIOPASDFGHJKL
+    Manufacture: TESTINGDEVICEMODELS
+    Product: TESTINGDEVICEMODEL8
+    Version: DEVICEMODELVERSION1
+    Serial: 247811834824373B23A
 
   CHASSIS:
-    Manufacture: QWERTYUIOPASDFGHJKL
+    Manufacture: TESTINGDEVICEMODELS
     Type: 10
-    Version: QWERTYUIOPASDFGHJKL
-    Serial: QWERTYUIOPASDFGHJKL
+    Version: DEVICEMODELVERSION3
+    Serial: 247444454824373E23B
 
   PROCESSOR:
     Type: 3
@@ -158,15 +156,12 @@ BfpSections:
     MaxCapacity: 8388608
     NumMemoryDevices: 2
 
-# GUID from primary volume, obtained using mountvol command
-HddGuid: "{4216bda4-5ab1-fed1-c913-832f9ab3627a}"
+HddGuid: "{4216bda4-5ab1-fed1-c913-832f9ab3627b}"
 
-# Results returned from GetVersionEx
 WindowsVersion:
   MajorVersion: 6
   MinorVersion: 3
   ProductType: 1
   BuildNumber: 9600
 
-# Value from HKLM\Software\Microsoft\Windows NT\CurrentVersion\InstallDate
-InstallDate: 0x12345678
+InstallDate: 0x25673349

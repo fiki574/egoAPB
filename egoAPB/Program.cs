@@ -13,7 +13,7 @@ namespace egoAPB
     {
         static void Main(string[] args)
         {
-            string email = "user", password = "pass", character = "char";
+            string email = "", password = "", character = "";
 
             if (!Directory.Exists("PacketDumps"))
                 Directory.CreateDirectory("PacketDumps");
@@ -105,13 +105,16 @@ namespace egoAPB
                     Console.WriteLine($"\t-> {name}-{instanceToJoin.InstanceNum}");
                     DistrictEnterInfo enterInfo = await client.JoinInstance(instanceToJoin);
                     */
+
+                    Console.ReadKey();
+                    client.Disconnect();
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
             }).Wait();
-            Console.ReadKey();
+            
         }
     }
 }
