@@ -13,7 +13,7 @@ namespace egoAPB
     {
         static void Main(string[] args)
         {
-            string email = "", password = "", character = "";
+            string email = "email", password = "pass", character = "char";
 
             if (!Directory.Exists("PacketDumps"))
                 Directory.CreateDirectory("PacketDumps");

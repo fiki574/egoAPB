@@ -95,8 +95,6 @@
     <Compile Include="World\ServerPackets\WS2GC_CLAN_RANK_INFO.cs" />
     <Compile Include="World\ServerPackets\WS2GC_FRIENDLIST_INFO.cs" />
     <Compile Include="World\ServerPackets\WS2GC_IGNORELIST_INFO.cs" />
-    <Compile Include="World\ServerPackets\WS2GC_UNKNOWN_PACKET01.cs" />
-    <Compile Include="World\ServerPackets\WS2GC_UNKNOWN_PACKET02.cs" />
     <Compile Include="World\ServerPackets\WS2GC_VOICE_CHANNEL_INFO.cs" />
     <Compile Include="World\Structures\ChallengesInfo.cs" />
     <Compile Include="World\Structures\ClanInfo.cs" />
