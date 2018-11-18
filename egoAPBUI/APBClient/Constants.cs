@@ -11,6 +11,7 @@
             LOBBY_HOST_PORT = 1001;
 
         public static readonly string
-            LOBBY_HOST_IP = "apb.login.gamersfirst.com";
+            LOBBY_HOST_IP = "apb.login.gamersfirst.com",
+            HARDWARE_YAML_LOC = "hw.yml";
     }
 }

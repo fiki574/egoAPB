@@ -2,30 +2,18 @@
 {
     partial class LoginScreen
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
+
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginScreen));
@@ -40,18 +28,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
-            // 
-            // pictureBox1
-            // 
+
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(1300, 900);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            // 
-            // Login
-            // 
+
             this.Login.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.Login.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.Login.Location = new System.Drawing.Point(646, 543);
@@ -61,18 +45,14 @@
             this.Login.Text = "Login";
             this.Login.UseVisualStyleBackColor = false;
             this.Login.Click += new System.EventHandler(this.Login_Click);
-            // 
-            // Username
-            // 
+
             this.Username.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.Username.ForeColor = System.Drawing.SystemColors.Info;
             this.Username.Location = new System.Drawing.Point(475, 420);
             this.Username.Name = "Username";
             this.Username.Size = new System.Drawing.Size(445, 22);
             this.Username.TabIndex = 2;
-            // 
-            // Password
-            // 
+
             this.Password.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.Password.ForeColor = System.Drawing.SystemColors.Control;
             this.Password.Location = new System.Drawing.Point(475, 493);
@@ -80,26 +60,20 @@
             this.Password.PasswordChar = '*';
             this.Password.Size = new System.Drawing.Size(445, 22);
             this.Password.TabIndex = 3;
-            // 
-            // pictureBox2
-            // 
+
             this.pictureBox2.Location = new System.Drawing.Point(315, 631);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(666, 28);
             this.pictureBox2.TabIndex = 4;
             this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox3
-            // 
+
             this.pictureBox3.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.pictureBox3.Location = new System.Drawing.Point(470, 451);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(133, 26);
             this.pictureBox3.TabIndex = 5;
             this.pictureBox3.TabStop = false;
-            // 
-            // About
-            // 
+
             this.About.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.About.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.About.Location = new System.Drawing.Point(315, 543);
@@ -109,9 +83,7 @@
             this.About.Text = "About";
             this.About.UseVisualStyleBackColor = false;
             this.About.Click += new System.EventHandler(this.About_Click);
-            // 
-            // Form1
-            // 
+
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1310, 903);
@@ -147,4 +119,3 @@
         private System.Windows.Forms.Button About;
     }
 }
-

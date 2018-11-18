@@ -22,6 +22,13 @@ namespace egoAPBUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            if(!File.Exists(Constants.HARDWARE_YAML_LOC))
+            {
+                MessageBox.Show($"File '{Constants.HARDWARE_YAML_LOC}' is missing! Make sure it is in the same folder as this executable.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(0);
+                return;
+            }
+
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
 
             if (!Directory.Exists("Packets"))
