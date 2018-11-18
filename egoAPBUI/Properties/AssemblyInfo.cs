@@ -1,14 +1,15 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("APBClient")]
+[assembly: AssemblyTitle("egoAPBUI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("APBClient")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyProduct("egoAPBUI")]
+[assembly: AssemblyCopyright("Copyright © 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: Guid("78937f83-4575-47ad-bb23-53f9d8b79160")]
+[assembly: ComVisible(false)]
+[assembly: Guid("b3495d94-77eb-4e49-933f-8ef4ef56afca")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

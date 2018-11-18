@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using System.IO;
 using System.Collections.Generic;
 using APBClient;
@@ -7,11 +8,19 @@ using APBClient.World;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace egoAPB
+namespace egoAPBUI
 {
-    class Program
+    static class Program
     {
-        static void Main(string[] args)
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new LoginScreen());
+        }
+
+        static void Main2(/*USE THIS FOR UI DEV*/)
         {
             Console.Title = "egoAPB - External Game Observer for APB: Reloaded";
             string email = "mail", password = "pass", character = "char";
@@ -44,9 +53,11 @@ namespace egoAPB
                         Console.WriteLine();
                     }
 
-                    CharacterInfo ChosenCharacter = characters.SingleOrDefault(c => c.CharacterName == character);
                     List<WorldInfo> worlds = await client.GetWorlds();
                     Console.WriteLine($"Got {worlds.Count} worlds");
+
+                    //DONE TO THIS POINT
+                    CharacterInfo ChosenCharacter = characters.SingleOrDefault(c => c.CharacterName == character);
                     worlds.ForEach(world => { Console.WriteLine($"\t-> {world.Name}, {world.Region}, {world.Status.ToString()}"); });
                     Console.WriteLine();
                     ChosenCharacter.WorldEnterData = await client.EnterWorld(ChosenCharacter.SlotNumber);

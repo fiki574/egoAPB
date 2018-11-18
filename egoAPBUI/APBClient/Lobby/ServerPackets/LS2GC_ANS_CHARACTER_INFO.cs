@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using APBClient.Networking;
 
 namespace APBClient.Lobby
@@ -32,8 +31,6 @@ namespace APBClient.Lobby
                 {
                     data.Appearance = new byte[size - 18];
                     Buffer.BlockCopy(appearance, 18, data.Appearance, 0, size - 18);
-                    File.WriteAllText(Constants.APPEARANCE_HEX_LOC, Util.HexDump(data.Appearance));
-                    File.WriteAllBytes(Constants.APPEARANCE_BYTE_LOC, data.Appearance);
                 }
                 else
                     data.Appearance = new byte[1] { 0x00 };

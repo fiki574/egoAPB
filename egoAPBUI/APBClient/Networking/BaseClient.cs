@@ -172,13 +172,13 @@ namespace APBClient.Networking
             }
             else
             {
-                string dir = $"PacketDumps/{packet.OpCode}";
+                string dir = $"Packets/{packet.OpCode}";
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
                 string date = "_" + DateTime.Now.Day + DateTime.Now.Month + DateTime.Now.Year + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second;
-                File.WriteAllText($"PacketDumps/{packet.OpCode}/{date}_hex", Util.HexDump(packet.Data));
-                File.WriteAllBytes($"PacketDumps/{packet.OpCode}/{date}_byte", packet.Data);
+                File.WriteAllText($"Packets/{packet.OpCode}/{date}_hex", Util.HexDump(packet.Data));
+                File.WriteAllBytes($"Packets/{packet.OpCode}/{date}_byte", packet.Data);
             }
         }
 

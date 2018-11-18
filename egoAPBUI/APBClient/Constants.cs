@@ -11,8 +11,6 @@
             LOBBY_HOST_PORT = 1001;
 
         public static readonly string
-            APPEARANCE_HEX_LOC = "PacketDumps/AppearanceDump_hex",
-            APPEARANCE_BYTE_LOC = "PacketDumps/AppearanceDump_byte",
             LOBBY_HOST_IP = "apb.login.gamersfirst.com";
     }
 }

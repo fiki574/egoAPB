@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B3495D94-77EB-4E49-933F-8EF4EF56AFCA}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>egoAPBUI</RootNamespace>
+    <AssemblyName>egoAPBUI</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.4.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.4\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\YamlDotNet.5.2.1\lib\net45\YamlDotNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="APBClient\APBClient.cs" />
+    <Compile Include="APBClient\Constants.cs" />
+    <Compile Include="APBClient\Crypto\NetworkRC4.cs" />
+    <Compile Include="APBClient\Crypto\WeakSrp6Client.cs" />
+    <Compile Include="APBClient\Crypto\WindowsRSA.cs" />
+    <Compile Include="APBClient\Crypto\XXTEA.cs" />
+    <Compile Include="APBClient\Enums.cs" />
+    <Compile Include="APBClient\HardwareStore.cs" />
+    <Compile Include="APBClient\IO\APBBinaryReader.cs" />
+    <Compile Include="APBClient\IO\APBBinaryWriter.cs" />
+    <Compile Include="APBClient\Lobby\ClientPackets\GC2LS_ASK_CHARACTER_INFO.cs" />
+    <Compile Include="APBClient\Lobby\ClientPackets\GC2LS_ASK_LOGIN.cs" />
+    <Compile Include="APBClient\Lobby\ClientPackets\GC2LS_ASK_WORLD_ENTER.cs" />
+    <Compile Include="APBClient\Lobby\ClientPackets\GC2LS_ASK_WORLD_LIST.cs" />
+    <Compile Include="APBClient\Lobby\ClientPackets\GC2LS_HARDWARE_INFO.cs" />
+    <Compile Include="APBClient\Lobby\ClientPackets\GC2LS_KEY_EXCHANGE.cs" />
+    <Compile Include="APBClient\Lobby\ClientPackets\GC2LS_LOGIN_PROOF.cs" />
+    <Compile Include="APBClient\Lobby\LobbyClient.cs" />
+    <Compile Include="APBClient\Lobby\ServerPackets\LS2GC_ANS_CHARACTER_INFO.cs" />
+    <Compile Include="APBClient\Lobby\ServerPackets\LS2GC_ANS_LOGIN_FAILED.cs" />
+    <Compile Include="APBClient\Lobby\ServerPackets\LS2GC_ANS_LOGIN_SUCCESS.cs" />
+    <Compile Include="APBClient\Lobby\ServerPackets\LS2GC_ANS_WORLD_ENTER.cs" />
+    <Compile Include="APBClient\Lobby\ServerPackets\LS2GC_ANS_WORLD_LIST.cs" />
+    <Compile Include="APBClient\Lobby\ServerPackets\LS2GC_CHARACTER_LIST.cs" />
+    <Compile Include="APBClient\Lobby\ServerPackets\LS2GC_ERROR.cs" />
+    <Compile Include="APBClient\Lobby\ServerPackets\LS2GC_KICK.cs" />
+    <Compile Include="APBClient\Lobby\ServerPackets\LS2GC_LOGIN_PUZZLE.cs" />
+    <Compile Include="APBClient\Lobby\ServerPackets\LS2GC_LOGIN_SALT.cs" />
+    <Compile Include="APBClient\Lobby\ServerPackets\LS2GC_WMI_REQUEST.cs" />
+    <Compile Include="APBClient\Lobby\Structures\CharacterInfo.cs" />
+    <Compile Include="APBClient\Lobby\Structures\LoginFailedData.cs" />
+    <Compile Include="APBClient\Lobby\Structures\WorldEnterData.cs" />
+    <Compile Include="APBClient\Lobby\Structures\WorldInfo.cs" />
+    <Compile Include="APBClient\Networking\APBOpCode.cs" />
+    <Compile Include="APBClient\Networking\BaseClient.cs" />
+    <Compile Include="APBClient\Networking\BasePacketHandler.cs" />
+    <Compile Include="APBClient\Networking\ClientPacket.cs" />
+    <Compile Include="APBClient\Networking\ErrorData.cs" />
+    <Compile Include="APBClient\Networking\IPacketHandler.cs" />
+    <Compile Include="APBClient\Networking\ISocketFactory.cs" />
+    <Compile Include="APBClient\Networking\KickData.cs" />
+    <Compile Include="APBClient\Networking\PacketHandlerAttribute.cs" />
+    <Compile Include="APBClient\Networking\ProxySocketFactory.cs" />
+    <Compile Include="APBClient\Networking\ServerPacket.cs" />
+    <Compile Include="APBClient\Networking\StandardSocketFactory.cs" />
+    <Compile Include="APBClient\ProxySocket\AuthMethod.cs" />
+    <Compile Include="APBClient\ProxySocket\AuthNone.cs" />
+    <Compile Include="APBClient\ProxySocket\AuthUserPass.cs" />
+    <Compile Include="APBClient\ProxySocket\IAsyncProxyResult.cs" />
+    <Compile Include="APBClient\ProxySocket\ProxyException.cs" />
+    <Compile Include="APBClient\ProxySocket\ProxySocket.cs" />
+    <Compile Include="APBClient\ProxySocket\Socks4Handler.cs" />
+    <Compile Include="APBClient\ProxySocket\Socks5Handler.cs" />
+    <Compile Include="APBClient\ProxySocket\SocksHandler.cs" />
+    <Compile Include="APBClient\Util.cs" />
+    <Compile Include="APBClient\World\ClientPackets\GC2WS_ASK_DISTRICT_ENTER.cs" />
+    <Compile Include="APBClient\World\ClientPackets\GC2WS_ASK_DISTRICT_RESERVE.cs" />
+    <Compile Include="APBClient\World\ClientPackets\GC2WS_ASK_INSTANCE_LIST.cs" />
+    <Compile Include="APBClient\World\ClientPackets\GC2WS_ASK_WORLD_ENTER.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_ANS_DISTRICT_ENTER.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_ANS_DISTRICT_RESERVE.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_ANS_INSTANCE_LIST.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_ANS_WORLD_ENTER.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_CHALLENGE_OVERVIEW.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_CLAN_INFO.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_CLAN_MOTD.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_CLAN_RANK_INFO.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_CLAN_STATUS.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_DISTRICT_LIST.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_FRIENDLIST_INFO.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_IGNORELIST_INFO.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_MAIL_INFO.cs" />
+    <Compile Include="APBClient\World\ServerPackets\WS2GC_VOICE_CHANNEL_INFO.cs" />
+    <Compile Include="APBClient\World\Structures\ChallengesInfo.cs" />
+    <Compile Include="APBClient\World\Structures\ClanInfo.cs" />
+    <Compile Include="APBClient\World\Structures\DistrictEnterInfo.cs" />
+    <Compile Include="APBClient\World\Structures\DistrictInfo.cs" />
+    <Compile Include="APBClient\World\Structures\FinalWorldEnterData.cs" />
+    <Compile Include="APBClient\World\Structures\FriendlistInfo.cs" />
+    <Compile Include="APBClient\World\Structures\IgnorelistInfo.cs" />
+    <Compile Include="APBClient\World\Structures\InstanceInfo.cs" />
+    <Compile Include="APBClient\World\Structures\MailInfo.cs" />
+    <Compile Include="APBClient\World\Structures\ReserveInfo.cs" />
+    <Compile Include="APBClient\World\Structures\VoiceChannelInfo.cs" />
+    <Compile Include="APBClient\World\WorldClient.cs" />
+    <Compile Include="LoginScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoginScreen.Designer.cs">
+      <DependentUpon>LoginScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainScreen.Designer.cs">
+      <DependentUpon>MainScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="LoginScreen.resx">
+      <DependentUpon>LoginScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainScreen.resx">
+      <DependentUpon>MainScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
