@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -37,10 +38,12 @@ namespace egoAPBUI
                         WriteLog($"Got details for character '{ch.CharacterName}'");
                         File.WriteAllText($"Appearances/{ch.CharacterName}_hex", Util.HexDump(ch.Details.Appearance));
                         File.WriteAllBytes($"Appearances/{ch.CharacterName}_byte", ch.Details.Appearance);
+                        CharactersList.Items.Add(ch.CharacterName);
                     }
 
                     Worlds = await LoginScreen.client.GetWorlds();
                     WriteLog($"Got {Worlds.Count} worlds");
+                    Worlds.ForEach(world => { WriteLog($"-> {world.Name}, {world.Region}, {world.Status.ToString()}"); });
                 }
                 catch(Exception ex)
                 {
@@ -69,6 +72,74 @@ namespace egoAPBUI
         public void WriteLog(string message)
         {
             richTextBox1.Text += message + "\n";
+        }
+
+        private void CharactersList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if(CharactersList.SelectedItem != null)
+                {
+                    string name = CharactersList.SelectedItem.ToString();
+                    CharacterInfo ch = Characters.FirstOrDefault(c => c.CharacterName == name);
+                    if(ch != null)
+                    {
+                        Threat.Text = $"Account threat: {ch.Threat.ToString()}";
+                        SlotNumber.Text = $"Slot number: {ch.SlotNumber}";
+                        Faction.Text = $"Faction: {ch.Faction}";
+                        Gender.Text = $"Gender: {ch.Details.Gender.ToString()}";
+                        WorldInfo.Text = $"World: {ch.WorldName}";
+                        LastLogin.Text = $"Last login: {ch.LastLogin.ToString()}";
+                        Playtime.Text = $"Playtime: {ch.Details.Playtime / 60 / 60} hours";
+                        Rank.Text = $"Rank: {ch.Details.Rank}";
+                        Money.Text = $"Money: ${ch.Details.Money}";
+                        JockerTickets.Text = $"Jocker Tickets: {ch.Details.JokerTickets}";
+                        Clan.Text = $"Clan: {ch.Details.Clan}";
+                        AppearanceDump.Text = Util.HexDump(ch.Details.Appearance);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                WriteLog(ex.ToString());
+            }
+        }
+
+        private void EnterWorld_Click(object sender, EventArgs e)
+        {
+            //TODO
+            //disallow entering with other characters while one is already in by disabling button
+            //change boolean inworld, string worldchar, and button to Exit world
+        }
+
+        private void GetClanInfo_Click(object sender, EventArgs e)
+        {
+            //TODO
+        }
+
+        private void GetMailList_Click(object sender, EventArgs e)
+        {
+            //TODO
+        }
+
+        private void RefreshChallenges_Click(object sender, EventArgs e)
+        {
+            //TODO
+        }
+
+        private void GetFriendsList_Click(object sender, EventArgs e)
+        {
+            //TODO
+        }
+
+        private void GetIgnoreList_Click(object sender, EventArgs e)
+        {
+            //TODO
+        }
+
+        private void RefreshInstances_Click(object sender, EventArgs e)
+        {
+            //TODO
         }
     }
 }

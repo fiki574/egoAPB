@@ -55,11 +55,11 @@ namespace egoAPBUI
 
                     List<WorldInfo> worlds = await client.GetWorlds();
                     Console.WriteLine($"Got {worlds.Count} worlds");
+                    worlds.ForEach(world => { Console.WriteLine($"\t-> {world.Name}, {world.Region}, {world.Status.ToString()}"); });
+                    Console.WriteLine();
 
                     //DONE TO THIS POINT
                     CharacterInfo ChosenCharacter = characters.SingleOrDefault(c => c.CharacterName == character);
-                    worlds.ForEach(world => { Console.WriteLine($"\t-> {world.Name}, {world.Region}, {world.Status.ToString()}"); });
-                    Console.WriteLine();
                     ChosenCharacter.WorldEnterData = await client.EnterWorld(ChosenCharacter.SlotNumber);
                     Console.WriteLine($"Connected to world server '{ChosenCharacter.WorldName}'");
                     Console.WriteLine();
