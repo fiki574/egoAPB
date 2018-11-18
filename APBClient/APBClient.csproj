@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APBClient.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="IO\APBBinaryReader.cs" />
     <Compile Include="IO\APBBinaryWriter.cs" />

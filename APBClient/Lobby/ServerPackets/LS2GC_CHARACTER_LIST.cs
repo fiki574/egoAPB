@@ -17,7 +17,6 @@ namespace APBClient.Lobby
                 int numAdditionalSlots = reader.ReadInt32();
                 byte accountThreat = reader.ReadByte();
                 var characters = new List<CharacterInfo>(numCharacters);
-
                 for (int i = 0; i < numCharacters; i++)
                 {
                     var info = new CharacterInfo
@@ -26,8 +25,8 @@ namespace APBClient.Lobby
                         Faction = (FactionType)reader.ReadByte(),
                         WorldStatus = (StatusType)reader.ReadByte(),
                         WorldUID = reader.ReadInt32(),
-                        WorldName = reader.ReadUnicodeString(34),
-                        CharacterName = reader.ReadUnicodeString(34),
+                        WorldName = reader.ReadUnicodeString(Constants.MAX_WORLD_NAME),
+                        CharacterName = reader.ReadUnicodeString(Constants.MAX_CHARACTER_NAME),
                         Rating = reader.ReadInt32(),
                         LastLogin = new DateTime(reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16()),
                         Threat = (ThreatType)accountThreat

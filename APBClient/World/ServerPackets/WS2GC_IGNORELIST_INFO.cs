@@ -10,6 +10,7 @@ namespace APBClient.World
             public override void HandlePacket(WorldClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
+
                 var ignores = new IgnorelistInfo();
                 ignores.TotalIgnores = reader.ReadByte();
                 ignores.Ignore = new IgnorelistInfo.Ignored[ignores.TotalIgnores];
@@ -17,7 +18,7 @@ namespace APBClient.World
                 {
                     ignores.Ignore[i] = new IgnorelistInfo.Ignored();
                     ignores.Ignore[i].CharacterID = reader.ReadInt32();
-                    ignores.Ignore[i].Name = reader.ReadUnicodeString(34);
+                    ignores.Ignore[i].Name = reader.ReadUnicodeString(Constants.MAX_CHARACTER_NAME);
                 }
                 client.OnGetIgnorelistSuccess(client, ignores);
             }

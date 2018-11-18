@@ -11,6 +11,7 @@ namespace APBClient.World
             public override void HandlePacket(WorldClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
+
                 var challenge = new ChallengesInfo();
                 challenge.TotalChallenges = reader.ReadInt32();
                 challenge.Challenges = new ChallengesInfo.Challenge[challenge.TotalChallenges];
@@ -19,7 +20,7 @@ namespace APBClient.World
                     challenge.Challenges[i] = new ChallengesInfo.Challenge();
                     challenge.Challenges[i].District = reader.ReadInt32();
                     reader.Skip(4);
-                    challenge.Challenges[i].Name = reader.ReadUnicodeString(28);
+                    challenge.Challenges[i].Name = reader.ReadUnicodeString(Constants.MAX_CHALLENGE_NAME);
                     reader.Skip(36);
                     challenge.Challenges[i].MyRanking = reader.ReadInt32();
                     challenge.Challenges[i].MyScore = reader.ReadInt32();

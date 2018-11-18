@@ -17,6 +17,7 @@ namespace APBClient.Lobby
             public override void HandlePacket(LobbyClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
+
                 uint hwVValue = reader.ReadUInt32();
                 int encryptedDataSize = reader.ReadInt32();
                 byte[] encryptedData = reader.ReadBytes(encryptedDataSize);
@@ -30,8 +31,7 @@ namespace APBClient.Lobby
                     return;
                 }
 
-                int numSections = dataReader.ReadInt32();
-                int numFields = dataReader.ReadInt32();
+                int numSections = dataReader.ReadInt32(), numFields = dataReader.ReadInt32();
 
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.OmitXmlDeclaration = true;
@@ -46,11 +46,9 @@ namespace APBClient.Lobby
 
                 for (int i = 0; i < numSections; i++)
                 {
-                    byte sectionNumber = dataReader.ReadByte();
-                    byte sectionNameLength = dataReader.ReadByte();
+                    byte sectionNumber = dataReader.ReadByte(), sectionNameLength = dataReader.ReadByte();
                     string sectionName = dataReader.ReadASCIIString(sectionNameLength + 1);
-                    byte skipHash = dataReader.ReadByte();
-                    byte selectLength = dataReader.ReadByte();
+                    byte skipHash = dataReader.ReadByte(), selectLength = dataReader.ReadByte();
                     string selectClause = dataReader.ReadASCIIString(selectLength + 1);
                     byte fromLength = dataReader.ReadByte();
                     string fromClause = dataReader.ReadASCIIString(fromLength + 1);

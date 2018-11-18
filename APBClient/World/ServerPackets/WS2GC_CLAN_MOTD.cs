@@ -10,6 +10,7 @@ namespace APBClient.World
             public override void HandlePacket(WorldClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
+
                 string motd = reader.ReadUnicodeString();
                 client.OnGetClanMOTDSuccess(client, motd);
             }

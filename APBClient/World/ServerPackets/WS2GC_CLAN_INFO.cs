@@ -10,9 +10,10 @@ namespace APBClient.World
             public override void HandlePacket(WorldClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
+
                 var info = new ClanInfo();
                 info.Leader = reader.ReadInt32();
-                info.Name = reader.ReadUnicodeString(60);
+                info.Name = reader.ReadUnicodeString(Constants.MAX_CLAN_NAME);
                 reader.Skip(6);
                 info.Members = reader.ReadByte();
                 info.ClanMembers = new ClanInfo.ClanMember[info.Members];
@@ -21,7 +22,7 @@ namespace APBClient.World
                     info.ClanMembers[i] = new ClanInfo.ClanMember();
                     info.ClanMembers[i].Account = reader.ReadInt32();
                     info.ClanMembers[i].Character = reader.ReadInt32();
-                    info.ClanMembers[i].Name = reader.ReadUnicodeString(34);
+                    info.ClanMembers[i].Name = reader.ReadUnicodeString(Constants.MAX_CHARACTER_NAME);
                     info.ClanMembers[i].Rank = reader.ReadInt32();
                     info.ClanMembers[i].Status = (StatusType)reader.ReadByte();
                 }

@@ -28,11 +28,7 @@ namespace APBClient.Lobby
             {
                 var reader = packet.Reader;
 
-                int versionHigh = reader.ReadInt32();
-                int versionMiddle = reader.ReadInt32();
-                int versionLow = reader.ReadInt32();
-                int buildNo = reader.ReadInt32();
-
+                int versionHigh = reader.ReadInt32(), versionMiddle = reader.ReadInt32(), versionLow = reader.ReadInt32(), buildNo = reader.ReadInt32();
                 byte unknown = reader.ReadByte();
                 uint puzzleSolution = 0;
                 if (unknown > 0)

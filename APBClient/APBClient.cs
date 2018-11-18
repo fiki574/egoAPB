@@ -46,15 +46,11 @@ namespace APBClient
         public class RequiredStateAttribute : Attribute
         {
             public readonly ClientState RequiredState;
-
             public RequiredStateAttribute(ClientState requiredState)
             {
                 RequiredState = requiredState;
             }
         }
-
-        private const string LobbyHost = "apb.login.gamersfirst.com";
-        private const int LobbyPort = 1001;
 
         private ISocketFactory SocketFactory;
         private LobbyClient LobbyClient;
@@ -100,7 +96,6 @@ namespace APBClient
                 Disconnect();
                 return false;
             }
-
             return true;
         }
 
@@ -111,7 +106,6 @@ namespace APBClient
             WorldClient?.Disconnect();
         }
 
-        #region Lobby Client
         private void SetupLobbyClient(string username, string password, HardwareStore hw)
         {
             LobbyClient = new LobbyClient(username, password, hw, SocketFactory);
@@ -192,7 +186,7 @@ namespace APBClient
             var tcs = new VirtualTCS<object>();
             ActiveTask = tcs;
             State = ClientState.LobbyServerConnectInProgress;
-            LobbyClient.Connect(LobbyHost, LobbyPort);
+            LobbyClient.Connect(Constants.LOBBY_HOST_IP, Constants.LOBBY_HOST_PORT);
 
             return tcs.Task;
         }
@@ -239,9 +233,7 @@ namespace APBClient
             LobbyClient.EnterWorld(characterSlotNumber);
             return tcs.Task;
         }
-        #endregion
 
-        #region World Client
         private void SetupWorldClient(byte[] encryptionKey, uint accountId, ulong timestamp)
         {
             WorldClient = new WorldClient(encryptionKey, accountId, timestamp, SocketFactory);
@@ -322,7 +314,7 @@ namespace APBClient
             Challenges = e;
         }
 
-        [RequiredState(ClientState.WorldServerConnectComplete)]
+        [RequiredState(ClientState.WorldServerDistrictEnterInProgress)]
         private void HandleGetVoiceChannelSuccess(object sender, VoiceChannelInfo e)
         {
             VoiceChannel = e;
@@ -351,8 +343,8 @@ namespace APBClient
         [RequiredState(ClientState.WorldServerDistrictReserveInProgress)]
         private void HandleDistrictReserveSuccess(object sender, ReserveInfo reserveInfo)
         {
-            WorldClient.AskDistrictEnter();
             State = ClientState.WorldServerDistrictEnterInProgress;
+            WorldClient.AskDistrictEnter();
         }
 
         [RequiredState(ClientState.WorldServerDistrictReserveInProgress)]
@@ -463,6 +455,5 @@ namespace APBClient
             WorldClient.AskDistrictReserve(instance.DistrictUid, instance.InstanceNum, -1, false);
             return tcs.Task;
         }
-        #endregion
     }
 }

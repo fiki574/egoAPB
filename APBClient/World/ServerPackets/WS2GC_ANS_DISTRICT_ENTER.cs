@@ -48,6 +48,32 @@ namespace APBClient.World
 
                 data.XXTEAKey = encryptionKey;
                 client.OnDistrictEnterSuccess(client, data);
+
+                /*
+                21:26:20 - ScriptLog: (cHostingGC2WS_0) cHostingGC2WS::OnDistrictEnterSuccess()
+                21:26:20 - ScriptLog: (cHostingClient_0) ClientState kCLIENT_STATE_DISTRICT_ENTER1_COMPLETE
+                21:26:20 - Log: Connecting to DistrictServer
+                21:26:20 - ScriptLog: (cHostingClient_0) ClientState kCLIENT_STATE_DISTRICTSERVER_CONNECT_IN_PROGRESS
+                21:26:20 - Init: WinSock: Socket queue 32768 / 32768
+                21:26:20 - Init: WinSock: I am DESKTOP-2UIF4CE (192.168.1.6:0)
+                21:26:20 - Log: [FSocketWin::Bind] Binding to 0.0.0.0:0
+                21:26:20 - DevNet: Game client on port 10200
+                ...
+                21:26:20 - DevNet: Sending AUTH ACCID=0022424338
+                21:26:20 - DevNet: PendingLevel received: HandshakeChallenge
+                21:26:20 - DevNet: PendingLevel received: HandshakeComplete
+                21:26:20 - DevNet: PendingLevel received: Uses
+                ...
+                21:26:22 - ScriptLog: (cAPBPlayerController_1) cHostingPlayerController::InitInputSystem()
+                21:26:22 - ScriptLog: (cAPBPlayerController_1) RemoteRole == ROLE_Authority
+                21:26:22 - ScriptLog: (cAPBPlayerController_1) Calling Send_GC2DS_ASK_DISTRICT_ENTER()
+                21:26:22 - ScriptLog: (cAPBPlayerController_1) Send [GC2DS_ASK_DISTRICT_ENTER]
+                ...
+                21:26:25 - ScriptLog: (cAPBPlayerController_1) Receive [DS2GC_ANS_DISTRICT_ENTER]
+                21:26:25 - ScriptLog: (cAPBPlayerController_1) m_nReturnCode 0
+                21:26:25 - ScriptLog: (cAPBPlayerController_1) m_nDistrictUID 16
+                21:26:25 - ScriptLog: (cAPBPlayerController_1) m_nInstanceNo 1
+                */
             }
         }
     }

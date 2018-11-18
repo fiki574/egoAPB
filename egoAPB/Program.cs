@@ -13,6 +13,7 @@ namespace egoAPB
     {
         static void Main(string[] args)
         {
+            Console.Title = "egoAPB - External Game Observer for APB: Reloaded";
             string email = "mail", password = "pass", character = "char";
 
             if (!Directory.Exists("PacketDumps"))
@@ -46,9 +47,7 @@ namespace egoAPB
                     CharacterInfo ChosenCharacter = characters.SingleOrDefault(c => c.CharacterName == character);
                     List<WorldInfo> worlds = await client.GetWorlds();
                     Console.WriteLine($"Got {worlds.Count} worlds");
-                    foreach (var w in worlds)
-                        Console.WriteLine($"\t-> {w.Name}, {w.Region}, {w.Status.ToString()}");
-
+                    worlds.ForEach(world => { Console.WriteLine($"\t-> {world.Name}, {world.Region}, {world.Status.ToString()}"); });
                     Console.WriteLine();
                     ChosenCharacter.WorldEnterData = await client.EnterWorld(ChosenCharacter.SlotNumber);
                     Console.WriteLine($"Connected to world server '{ChosenCharacter.WorldName}'");
@@ -59,10 +58,7 @@ namespace egoAPB
                         ChosenCharacter.Clan = client.GetClanInfo();
                         ChosenCharacter.Clan.MOTD = client.GetClanMOTD();
                         Console.WriteLine($"Got clan info for '{ChosenCharacter.Clan.Name}'");
-                        string motd = ChosenCharacter.Clan.MOTD;
-                        motd = motd.Replace("\n", string.Empty);
-                        motd = motd.Replace("\r", string.Empty);
-                        motd = motd.Replace("\t", string.Empty);
+                        string motd = ChosenCharacter.Clan.MOTD.Replace("\n", string.Empty).Replace("\r", string.Empty).Replace("\t", string.Empty);
                         Console.WriteLine($"\t-> Total members: {ChosenCharacter.Clan.Members}\n\t-> Message of the day: {motd}\n\t-> Leader ID: {ChosenCharacter.Clan.Leader}");
                         Console.WriteLine();
 
@@ -78,7 +74,7 @@ namespace egoAPB
                     }
 
                     ChosenCharacter.MailsInfo = client.GetMailInfo();
-                    Console.WriteLine($"Got total of {ChosenCharacter.MailsInfo.Total} mails in inbox (unread: {ChosenCharacter.MailsInfo.Unread}, expired: {ChosenCharacter.MailsInfo.Expired})}}");
+                    Console.WriteLine($"Got total of {ChosenCharacter.MailsInfo.Total} mails in inbox (unread: {ChosenCharacter.MailsInfo.Unread}, expired: {ChosenCharacter.MailsInfo.Expired})");
 
                     Dictionary<int, DistrictInfo> districts = client.GetDistricts();
                     Console.WriteLine($"Got {districts.Count} districts");
@@ -87,27 +83,13 @@ namespace egoAPB
                     List<InstanceInfo> instances = await client.GetInstances();
                     Console.WriteLine($"Got {instances.Count} instances");
 
-                    foreach (var instance in instances)
-                    {
-                        string name = "Unknown-District-EN-0";
-                        try
-                        {
-                            name = districts[instance.DistrictUid].Name;
-                        }
-                        catch
-                        {
-                        }
-
-                        Console.WriteLine($"\t-> {name}-{instance.InstanceNum} ({instance.Enforcers} Enf, {instance.Criminals} Crim, Threat = {((ThreatType)instance.Threat).ToString()})");
-                    }
-
+                    instances.ForEach(instance => { Console.WriteLine($"\t-> {districts[instance.DistrictUid].Name}-{instance.InstanceNum} ({instance.Enforcers} Enf, {instance.Criminals} Crim, Threat = {((ThreatType)instance.Threat).ToString()})"); });
                     Console.WriteLine();
 
-                    /*
-                    var instanceToJoin = (from instance in instances where instance.DistrictStatus == 0 && instance.Threat == 4 select instance).OrderBy(s => s.Criminals + s.Enforcers).First();
-                    Console.WriteLine($"\t-> {name}-{instanceToJoin.InstanceNum}");
+                    var instanceToJoin = (from instance in instances where instance.DistrictStatus == 0 && instance.Threat == (int)ChosenCharacter.Threat select instance).OrderBy(s => s.Criminals + s.Enforcers).First();
+                    string inst = districts[instanceToJoin.DistrictUid].Name + "-" + instanceToJoin.InstanceNum;
                     DistrictEnterInfo enterInfo = await client.JoinInstance(instanceToJoin);
-                    */
+                    Console.WriteLine($"Joined {inst}");
 
                     Console.ReadKey();
                     client.Disconnect();
@@ -115,9 +97,9 @@ namespace egoAPB
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
+                    Console.ReadKey();
                 }
             }).Wait();
-            
         }
     }
 }

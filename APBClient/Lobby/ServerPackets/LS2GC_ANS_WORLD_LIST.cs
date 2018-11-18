@@ -22,13 +22,12 @@ namespace APBClient.Lobby
 
                 int numWorlds = reader.ReadInt16();
                 var worlds = new List<WorldInfo>(numWorlds);
-
                 for (int i = 0; i < numWorlds; i++)
                 {
                     var info = new WorldInfo
                     {
                         Uid = reader.ReadInt32(),
-                        Name = reader.ReadUnicodeString(34),
+                        Name = reader.ReadUnicodeString(Constants.MAX_WORLD_NAME),
                         Status = (StatusType)reader.ReadByte(),
                         Population = reader.ReadByte(),
                         EnfFaction = reader.ReadByte(),

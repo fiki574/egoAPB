@@ -10,11 +10,12 @@ namespace APBClient.World
             public override void HandlePacket(WorldClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
+
                 int ranks = reader.ReadByte();
                 for(int i = 0; i < ranks; i++)
                 {
                     int uid = reader.ReadInt32();
-                    string name = reader.ReadUnicodeString(16);
+                    string name = reader.ReadUnicodeString(Constants.MAX_CLAN_RANK_NAME);
                     reader.Skip(22);
                 }
             }

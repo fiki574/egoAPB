@@ -10,6 +10,7 @@ namespace APBClient.World
             public override void HandlePacket(WorldClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
+
                 var vci = new VoiceChannelInfo()
                 {
                     ID = reader.ReadInt64(),

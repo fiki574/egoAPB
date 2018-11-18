@@ -17,22 +17,19 @@ namespace APBClient.Lobby
             public override void HandlePacket(LobbyClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
+
                 string realTag = reader.ReadUnicodeString(50);
                 uint accountPremium = reader.ReadUInt32();
-                ulong timeStamp = reader.ReadUInt64();
-                ulong accountPermissions = reader.ReadUInt64();
+                ulong timeStamp = reader.ReadUInt64(), accountPermissions = reader.ReadUInt64();
                 for (int i = 0; i < 5; i++)
                     reader.ReadInt32();
 
-                ushort voicePortMin = reader.ReadUInt16();
-                ushort voicePortMax = reader.ReadUInt16();
+                ushort voicePortMin = reader.ReadUInt16(), voicePortMax = reader.ReadUInt16();
                 uint voiceAccountId = reader.ReadUInt32();
-                string voiceUsername = reader.ReadASCIIString(17);
-                string voiceKey = reader.ReadASCIIString(17);
+                string voiceUsername = reader.ReadASCIIString(17), voiceKey = reader.ReadASCIIString(17);
 
                 RsaKeyParameters serverPub = WindowsRSA.ReadPublicKeyBlob(reader);
-                string countryCode = reader.ReadUnicodeString();
-                string voiceURL = reader.ReadASCIIString();
+                string countryCode = reader.ReadUnicodeString(), voiceURL = reader.ReadASCIIString();
 
                 var generator = new RsaKeyPairGenerator();
                 generator.Init(new KeyGenerationParameters(new SecureRandom(), 1024));

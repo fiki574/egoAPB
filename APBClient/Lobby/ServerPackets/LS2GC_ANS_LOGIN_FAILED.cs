@@ -10,6 +10,7 @@ namespace APBClient.Lobby
             public override void HandlePacket(LobbyClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
+
                 var data = new LoginFailedData
                 {
                     ReturnCode = reader.ReadUInt32(),

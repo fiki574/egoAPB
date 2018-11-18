@@ -12,6 +12,7 @@ namespace APBClient.Lobby
             public override void HandlePacket(LobbyClient client, ServerPacket packet)
             {
                 var reader = packet.Reader;
+
                 var response = reader.ReadInt32();
                 var data = new CharacterInfo.Detailed
                 {
@@ -21,7 +22,7 @@ namespace APBClient.Lobby
                     Rank = reader.ReadUInt32(),
                     Money = reader.ReadUInt32(),
                     JokerTickets = reader.ReadUInt32(),
-                    Clan = reader.ReadUnicodeString(60)
+                    Clan = reader.ReadUnicodeString(Constants.MAX_CLAN_NAME)
                 };
 
                 int size = packet.Data.Length - (int)reader.BaseStream.Position;
@@ -31,8 +32,8 @@ namespace APBClient.Lobby
                 {
                     data.Appearance = new byte[size - 18];
                     Buffer.BlockCopy(appearance, 18, data.Appearance, 0, size - 18);
-                    File.WriteAllText("PacketDumps/AppearanceDump_hex", Util.HexDump(data.Appearance));
-                    File.WriteAllBytes("PacketDumps/AppearanceDump_byte", data.Appearance);
+                    File.WriteAllText(Constants.APPEARANCE_HEX_LOC, Util.HexDump(data.Appearance));
+                    File.WriteAllBytes(Constants.APPEARANCE_BYTE_LOC, data.Appearance);
                 }
                 else
                     data.Appearance = new byte[1] { 0x00 };
