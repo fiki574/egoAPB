@@ -19,10 +19,22 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainScreen));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.MyCharacters = new System.Windows.Forms.TabPage();
+            this.RefreshCharacters = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.RefreshInstances = new System.Windows.Forms.Button();
+            this.EnterWorld = new System.Windows.Forms.Button();
+            this.GetFriendsIgnoresList = new System.Windows.Forms.Button();
+            this.RefreshChallenges = new System.Windows.Forms.Button();
+            this.GetMailList = new System.Windows.Forms.Button();
+            this.GetClanInfo = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.AppearanceDump = new System.Windows.Forms.RichTextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.Faction = new System.Windows.Forms.Label();
             this.Gender = new System.Windows.Forms.Label();
+            this.Clan = new System.Windows.Forms.Label();
             this.Rank = new System.Windows.Forms.Label();
+            this.JockerTickets = new System.Windows.Forms.Label();
             this.Money = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.Threat = new System.Windows.Forms.Label();
@@ -30,8 +42,6 @@
             this.WorldInfo = new System.Windows.Forms.Label();
             this.LastLogin = new System.Windows.Forms.Label();
             this.Playtime = new System.Windows.Forms.Label();
-            this.Clan = new System.Windows.Forms.Label();
-            this.JockerTickets = new System.Windows.Forms.Label();
             this.CharactersList = new System.Windows.Forms.ListBox();
             this.MyClan = new System.Windows.Forms.TabPage();
             this.MyMails = new System.Windows.Forms.TabPage();
@@ -45,23 +55,13 @@
             this.SendCommand = new System.Windows.Forms.Button();
             this.Command = new System.Windows.Forms.TextBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.AppearanceDump = new System.Windows.Forms.RichTextBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.GetClanInfo = new System.Windows.Forms.Button();
-            this.GetMailList = new System.Windows.Forms.Button();
-            this.RefreshChallenges = new System.Windows.Forms.Button();
-            this.GetFriendsList = new System.Windows.Forms.Button();
-            this.GetIgnoreList = new System.Windows.Forms.Button();
-            this.EnterWorld = new System.Windows.Forms.Button();
-            this.RefreshInstances = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.MyCharacters.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -83,7 +83,7 @@
             // 
             // MyCharacters
             // 
-            this.MyCharacters.Controls.Add(this.EnterWorld);
+            this.MyCharacters.Controls.Add(this.RefreshCharacters);
             this.MyCharacters.Controls.Add(this.groupBox5);
             this.MyCharacters.Controls.Add(this.groupBox4);
             this.MyCharacters.Controls.Add(this.groupBox3);
@@ -96,6 +96,110 @@
             this.MyCharacters.TabIndex = 0;
             this.MyCharacters.Text = "Characters";
             this.MyCharacters.UseVisualStyleBackColor = true;
+            // 
+            // RefreshCharacters
+            // 
+            this.RefreshCharacters.Location = new System.Drawing.Point(6, 477);
+            this.RefreshCharacters.Name = "RefreshCharacters";
+            this.RefreshCharacters.Size = new System.Drawing.Size(120, 38);
+            this.RefreshCharacters.TabIndex = 17;
+            this.RefreshCharacters.Text = "Refresh!";
+            this.RefreshCharacters.UseVisualStyleBackColor = true;
+            this.RefreshCharacters.Click += new System.EventHandler(this.Refresh_Click);
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.RefreshInstances);
+            this.groupBox5.Controls.Add(this.EnterWorld);
+            this.groupBox5.Controls.Add(this.GetFriendsIgnoresList);
+            this.groupBox5.Controls.Add(this.RefreshChallenges);
+            this.groupBox5.Controls.Add(this.GetMailList);
+            this.groupBox5.Controls.Add(this.GetClanInfo);
+            this.groupBox5.Location = new System.Drawing.Point(136, 395);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(343, 111);
+            this.groupBox5.TabIndex = 16;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Actions for selected character (must enter world):";
+            // 
+            // RefreshInstances
+            // 
+            this.RefreshInstances.Location = new System.Drawing.Point(175, 81);
+            this.RefreshInstances.Name = "RefreshInstances";
+            this.RefreshInstances.Size = new System.Drawing.Size(162, 25);
+            this.RefreshInstances.TabIndex = 5;
+            this.RefreshInstances.Text = "Refresh instances list";
+            this.RefreshInstances.UseVisualStyleBackColor = true;
+            this.RefreshInstances.Click += new System.EventHandler(this.RefreshInstances_Click);
+            // 
+            // EnterWorld
+            // 
+            this.EnterWorld.Location = new System.Drawing.Point(175, 51);
+            this.EnterWorld.Name = "EnterWorld";
+            this.EnterWorld.Size = new System.Drawing.Size(163, 25);
+            this.EnterWorld.TabIndex = 4;
+            this.EnterWorld.Text = "Enter world";
+            this.EnterWorld.UseVisualStyleBackColor = true;
+            this.EnterWorld.Click += new System.EventHandler(this.EnterWorld_Click);
+            // 
+            // GetFriendsIgnoresList
+            // 
+            this.GetFriendsIgnoresList.Location = new System.Drawing.Point(175, 21);
+            this.GetFriendsIgnoresList.Name = "GetFriendsIgnoresList";
+            this.GetFriendsIgnoresList.Size = new System.Drawing.Size(163, 25);
+            this.GetFriendsIgnoresList.TabIndex = 3;
+            this.GetFriendsIgnoresList.Text = "Get friend+ignore list";
+            this.GetFriendsIgnoresList.UseVisualStyleBackColor = true;
+            this.GetFriendsIgnoresList.Click += new System.EventHandler(this.GetFriendsIgnoresList_Click);
+            // 
+            // RefreshChallenges
+            // 
+            this.RefreshChallenges.Location = new System.Drawing.Point(6, 81);
+            this.RefreshChallenges.Name = "RefreshChallenges";
+            this.RefreshChallenges.Size = new System.Drawing.Size(163, 25);
+            this.RefreshChallenges.TabIndex = 2;
+            this.RefreshChallenges.Text = "Refresh challenges";
+            this.RefreshChallenges.UseVisualStyleBackColor = true;
+            this.RefreshChallenges.Click += new System.EventHandler(this.RefreshChallenges_Click);
+            // 
+            // GetMailList
+            // 
+            this.GetMailList.Location = new System.Drawing.Point(6, 51);
+            this.GetMailList.Name = "GetMailList";
+            this.GetMailList.Size = new System.Drawing.Size(163, 25);
+            this.GetMailList.TabIndex = 1;
+            this.GetMailList.Text = "Get mails list";
+            this.GetMailList.UseVisualStyleBackColor = true;
+            this.GetMailList.Click += new System.EventHandler(this.GetMailList_Click);
+            // 
+            // GetClanInfo
+            // 
+            this.GetClanInfo.Location = new System.Drawing.Point(6, 21);
+            this.GetClanInfo.Name = "GetClanInfo";
+            this.GetClanInfo.Size = new System.Drawing.Size(163, 25);
+            this.GetClanInfo.TabIndex = 0;
+            this.GetClanInfo.Text = "Get clan info";
+            this.GetClanInfo.UseVisualStyleBackColor = true;
+            this.GetClanInfo.Click += new System.EventHandler(this.GetClanInfo_Click);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.AppearanceDump);
+            this.groupBox4.Location = new System.Drawing.Point(499, 6);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(787, 500);
+            this.groupBox4.TabIndex = 15;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Appearance dump:";
+            // 
+            // AppearanceDump
+            // 
+            this.AppearanceDump.Location = new System.Drawing.Point(6, 21);
+            this.AppearanceDump.Name = "AppearanceDump";
+            this.AppearanceDump.ReadOnly = true;
+            this.AppearanceDump.Size = new System.Drawing.Size(775, 473);
+            this.AppearanceDump.TabIndex = 0;
+            this.AppearanceDump.Text = "";
             // 
             // groupBox3
             // 
@@ -130,6 +234,15 @@
             this.Gender.TabIndex = 4;
             this.Gender.Text = "Gender: None";
             // 
+            // Clan
+            // 
+            this.Clan.AutoSize = true;
+            this.Clan.Location = new System.Drawing.Point(6, 164);
+            this.Clan.Name = "Clan";
+            this.Clan.Size = new System.Drawing.Size(78, 17);
+            this.Clan.TabIndex = 12;
+            this.Clan.Text = "Clan: None";
+            // 
             // Rank
             // 
             this.Rank.AutoSize = true;
@@ -138,6 +251,15 @@
             this.Rank.Size = new System.Drawing.Size(57, 17);
             this.Rank.TabIndex = 9;
             this.Rank.Text = "Rank: 0";
+            // 
+            // JockerTickets
+            // 
+            this.JockerTickets.AutoSize = true;
+            this.JockerTickets.Location = new System.Drawing.Point(6, 137);
+            this.JockerTickets.Name = "JockerTickets";
+            this.JockerTickets.Size = new System.Drawing.Size(108, 17);
+            this.JockerTickets.TabIndex = 11;
+            this.JockerTickets.Text = "Joker Tickets: 0";
             // 
             // Money
             // 
@@ -206,24 +328,6 @@
             this.Playtime.Size = new System.Drawing.Size(77, 17);
             this.Playtime.TabIndex = 8;
             this.Playtime.Text = "Playtime: 0";
-            // 
-            // Clan
-            // 
-            this.Clan.AutoSize = true;
-            this.Clan.Location = new System.Drawing.Point(6, 164);
-            this.Clan.Name = "Clan";
-            this.Clan.Size = new System.Drawing.Size(78, 17);
-            this.Clan.TabIndex = 12;
-            this.Clan.Text = "Clan: None";
-            // 
-            // JockerTickets
-            // 
-            this.JockerTickets.AutoSize = true;
-            this.JockerTickets.Location = new System.Drawing.Point(6, 137);
-            this.JockerTickets.Name = "JockerTickets";
-            this.JockerTickets.Size = new System.Drawing.Size(108, 17);
-            this.JockerTickets.TabIndex = 11;
-            this.JockerTickets.Text = "Joker Tickets: 0";
             // 
             // CharactersList
             // 
@@ -346,110 +450,6 @@
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.AppearanceDump);
-            this.groupBox4.Location = new System.Drawing.Point(499, 6);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(787, 500);
-            this.groupBox4.TabIndex = 15;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Appearance dump:";
-            // 
-            // AppearanceDump
-            // 
-            this.AppearanceDump.Location = new System.Drawing.Point(6, 21);
-            this.AppearanceDump.Name = "AppearanceDump";
-            this.AppearanceDump.ReadOnly = true;
-            this.AppearanceDump.Size = new System.Drawing.Size(775, 473);
-            this.AppearanceDump.TabIndex = 0;
-            this.AppearanceDump.Text = "";
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.RefreshInstances);
-            this.groupBox5.Controls.Add(this.GetIgnoreList);
-            this.groupBox5.Controls.Add(this.GetFriendsList);
-            this.groupBox5.Controls.Add(this.RefreshChallenges);
-            this.groupBox5.Controls.Add(this.GetMailList);
-            this.groupBox5.Controls.Add(this.GetClanInfo);
-            this.groupBox5.Location = new System.Drawing.Point(136, 395);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(343, 111);
-            this.groupBox5.TabIndex = 16;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Actions for selected character (must enter world):";
-            // 
-            // GetClanInfo
-            // 
-            this.GetClanInfo.Location = new System.Drawing.Point(6, 21);
-            this.GetClanInfo.Name = "GetClanInfo";
-            this.GetClanInfo.Size = new System.Drawing.Size(163, 25);
-            this.GetClanInfo.TabIndex = 0;
-            this.GetClanInfo.Text = "Get clan info";
-            this.GetClanInfo.UseVisualStyleBackColor = true;
-            this.GetClanInfo.Click += new System.EventHandler(this.GetClanInfo_Click);
-            // 
-            // GetMailList
-            // 
-            this.GetMailList.Location = new System.Drawing.Point(6, 51);
-            this.GetMailList.Name = "GetMailList";
-            this.GetMailList.Size = new System.Drawing.Size(163, 25);
-            this.GetMailList.TabIndex = 1;
-            this.GetMailList.Text = "Get mails list";
-            this.GetMailList.UseVisualStyleBackColor = true;
-            this.GetMailList.Click += new System.EventHandler(this.GetMailList_Click);
-            // 
-            // RefreshChallenges
-            // 
-            this.RefreshChallenges.Location = new System.Drawing.Point(6, 81);
-            this.RefreshChallenges.Name = "RefreshChallenges";
-            this.RefreshChallenges.Size = new System.Drawing.Size(163, 25);
-            this.RefreshChallenges.TabIndex = 2;
-            this.RefreshChallenges.Text = "Refresh challenges";
-            this.RefreshChallenges.UseVisualStyleBackColor = true;
-            this.RefreshChallenges.Click += new System.EventHandler(this.RefreshChallenges_Click);
-            // 
-            // GetFriendsList
-            // 
-            this.GetFriendsList.Location = new System.Drawing.Point(175, 21);
-            this.GetFriendsList.Name = "GetFriendsList";
-            this.GetFriendsList.Size = new System.Drawing.Size(163, 25);
-            this.GetFriendsList.TabIndex = 3;
-            this.GetFriendsList.Text = "Get friend list";
-            this.GetFriendsList.UseVisualStyleBackColor = true;
-            this.GetFriendsList.Click += new System.EventHandler(this.GetFriendsList_Click);
-            // 
-            // GetIgnoreList
-            // 
-            this.GetIgnoreList.Location = new System.Drawing.Point(175, 51);
-            this.GetIgnoreList.Name = "GetIgnoreList";
-            this.GetIgnoreList.Size = new System.Drawing.Size(163, 25);
-            this.GetIgnoreList.TabIndex = 4;
-            this.GetIgnoreList.Text = "Get ignore list";
-            this.GetIgnoreList.UseVisualStyleBackColor = true;
-            this.GetIgnoreList.Click += new System.EventHandler(this.GetIgnoreList_Click);
-            // 
-            // EnterWorld
-            // 
-            this.EnterWorld.Location = new System.Drawing.Point(6, 477);
-            this.EnterWorld.Name = "EnterWorld";
-            this.EnterWorld.Size = new System.Drawing.Size(120, 38);
-            this.EnterWorld.TabIndex = 17;
-            this.EnterWorld.Text = "Enter world!";
-            this.EnterWorld.UseVisualStyleBackColor = true;
-            this.EnterWorld.Click += new System.EventHandler(this.EnterWorld_Click);
-            // 
-            // RefreshInstances
-            // 
-            this.RefreshInstances.Location = new System.Drawing.Point(175, 81);
-            this.RefreshInstances.Name = "RefreshInstances";
-            this.RefreshInstances.Size = new System.Drawing.Size(162, 25);
-            this.RefreshInstances.TabIndex = 5;
-            this.RefreshInstances.Text = "Refresh instances list";
-            this.RefreshInstances.UseVisualStyleBackColor = true;
-            this.RefreshInstances.Click += new System.EventHandler(this.RefreshInstances_Click);
-            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -465,14 +465,14 @@
             this.Load += new System.EventHandler(this.MainScreen_Load);
             this.tabControl1.ResumeLayout(false);
             this.MyCharacters.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -513,9 +513,9 @@
         private System.Windows.Forms.Button GetClanInfo;
         private System.Windows.Forms.Button GetMailList;
         private System.Windows.Forms.Button RefreshChallenges;
-        private System.Windows.Forms.Button GetIgnoreList;
-        private System.Windows.Forms.Button GetFriendsList;
         private System.Windows.Forms.Button EnterWorld;
+        private System.Windows.Forms.Button GetFriendsIgnoresList;
+        private System.Windows.Forms.Button RefreshCharacters;
         private System.Windows.Forms.Button RefreshInstances;
     }
 }

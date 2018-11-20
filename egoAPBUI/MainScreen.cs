@@ -105,11 +105,9 @@ namespace egoAPBUI
             }
         }
 
-        private void EnterWorld_Click(object sender, EventArgs e)
+        private void Refresh_Click(object sender, EventArgs e)
         {
             //TODO
-            //disallow entering with other characters while one is already in by disabling button
-            //change boolean inworld, string worldchar, and button to Exit world
         }
 
         private void GetClanInfo_Click(object sender, EventArgs e)
@@ -127,12 +125,12 @@ namespace egoAPBUI
             //TODO
         }
 
-        private void GetFriendsList_Click(object sender, EventArgs e)
+        private void GetFriendsIgnoresList_Click(object sender, EventArgs e)
         {
             //TODO
         }
 
-        private void GetIgnoreList_Click(object sender, EventArgs e)
+        private void EnterWorld_Click(object sender, EventArgs e)
         {
             //TODO
         }
